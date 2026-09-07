@@ -1,0 +1,61 @@
+{
+  "_README": {
+    "purpose": "Evidence that the recipient archetypes in recipient_profiles.json reflect real organisation types operating in Kolkata. This file is CITATION MATERIAL ONLY.",
+    "hard_rule": "No entry in this file may carry an operational capability claim - no licence status, no refrigeration temperature, no capacity, no facilities, no availability. Those are not publicly knowable and asserting them about a named charity would be fabrication.",
+    "not_used_by": "The agent never reads this file. It does not participate in matching, ranking, or safety gating.",
+    "directory_source": {
+      "name": "Indian Food Sharing Alliance (IFSA), an FSSAI initiative integrating partner organisations, food recovery agencies and NGOs",
+      "url": "https://sharefood.eatrightindia.gov.in/",
+      "citywise_list": "https://savefoodsharefood.in/ifsa-network.html",
+      "scale_note": "82 agencies registered under IFSA across 90+ cities as of the 2025 parliamentary reply at https://fcainfoweb.nic.in/PMS/writereaddata/2025_LS_B_2181.pdf - so expect single digits for any one city, not dozens.",
+      "accessed": "2026-09-07"
+    },
+    "TODO_FOR_BUILDER": "Download the IFSA city-wise list and add the Kolkata entries below in the same shape. Do not add capability fields when you do. If a fact is not on a public page you can link, leave it out."
+  },
+
+  "organizations": [
+    {
+      "org_id": "org_rha_kolkata",
+      "display_name": "Robin Hood Army - Kolkata chapter",
+      "city": "Kolkata",
+      "sourced_facts": [
+        "Volunteer-based, zero-funds organisation that collects surplus food from restaurants and the community and serves it to people in need.",
+        "Kolkata chapter began operating in October 2014.",
+        "Reported distribution areas include Nonapukur, Sealdah, and locations under the Hastings and Chowringhee flyovers.",
+        "Operates a hyperlocal chapter model; volunteers are largely students and working professionals acting in their free time."
+      ],
+      "provenance": [
+        {
+          "type": "PUBLIC_SOURCE",
+          "url": "https://robinhoodarmy.com/",
+          "supports": "volunteer-based zero-funds surplus food redistribution model",
+          "accessed": "2026-09-07"
+        },
+        {
+          "type": "PUBLIC_SOURCE",
+          "url": "https://www.huffpost.com/archive/in/entry/photoblog-the-robin-hood-army-is-on-a-mission-to-free-1-million_in_5c10f2cce4b085260ba754ca",
+          "supports": "Kolkata chapter start date and distribution areas",
+          "accessed": "2026-09-07"
+        }
+      ],
+      "capability_claims": null,
+      "capability_claims_note": "Intentionally null. Licence status, storage, reheating and refrigeration are not publicly documented for this organisation and are not asserted here."
+    }
+  ],
+
+  "archetype_justification": {
+    "volunteer_redistribution_network": {
+      "grounded_in": "org_rha_kolkata",
+      "reasoning": "A volunteer network that moves surplus food from restaurants to street distribution points operates on immediate handoff rather than storage. Modelling one recipient archetype with no cold chain and no reheating is realistic for this sector, and it produces a legitimate safety-gate failure for perishable food that needs holding - which is a real constraint, not a contrived one.",
+      "note": "The archetype is derived from the published operating model, not from any private knowledge of this organisation's facilities."
+    },
+    "kitchen_based_meal_provider": {
+      "grounded_in": "IFSA directory category: food recovery and redistribution agencies operating prepared-meal programmes",
+      "reasoning": "Organisations running their own kitchens plausibly hold licences and have storage and reheating capability, which FSSAI reg. 5(2) requires of a distribution organisation."
+    },
+    "shelter_with_storage": {
+      "grounded_in": "IFSA directory category: beneficiary institutions receiving redistributed food",
+      "reasoning": "Residential institutions typically have refrigeration and on-site catering, giving a recipient archetype that can accept perishables."
+    }
+  }
+}

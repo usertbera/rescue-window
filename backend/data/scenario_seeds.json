@@ -1,0 +1,302 @@
+{
+  "_README": {
+    "purpose": "Simulated dynamic world state. Describes the scenario, never a real organisation's behaviour.",
+    "hard_rule": "Anonymous recipient_/driver_ IDs only. A real organisation name must never appear as a key or value in this file.",
+    "clock": "All times are scenario-time. The simulated clock advances at a configurable multiplier so a rescue spanning an hour records inside a five-minute video.",
+    "determinism": "Same seed, same run. This is what makes the demo replayable and the trace auditable.",
+    "same_code": "All three seeds are executed by the identical coordinator. No branch anywhere reads the seed name.",
+    "capability_replies": "Simulated answers to confirmation queries. A recipient/field absent here means no reply arrives: the unknown stays unknown, the candidate is eliminated, and the loop replans. That is not an escalation while other candidates remain."
+  },
+  "seeds": {
+    "seed_01_clean_rescue": {
+      "label": "Straightforward rescue",
+      "demonstrates": "Happy path with a real safety gate still doing visible work.",
+      "scenario_start": "2026-09-14T15:10:00+05:30",
+      "offer": {
+        "offer_id": "offer_01",
+        "donor_id": "donor_banquet_hall_a",
+        "donor_has_valid_licence": true,
+        "food_type": "prepared_meal",
+        "quantity_servings": 40,
+        "perishable": true,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T19:00:00+05:30",
+        "label": {
+          "food_name": "Vegetable pulao and dal",
+          "source": "Banquet Hall A central kitchen",
+          "preparation_date": "2026-09-14T13:00:00+05:30",
+          "last_consumption_date": "2026-09-14T19:00:00+05:30",
+          "vegetarian": true,
+          "masked": false
+        },
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": false
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 60,
+          "response": "accept",
+          "response_delay_min": 4
+        },
+        "recipient_002": {
+          "capacity_servings": 80,
+          "response": "accept",
+          "response_delay_min": 2
+        },
+        "recipient_003": {
+          "capacity_servings": 25,
+          "response": "accept",
+          "response_delay_min": 9
+        },
+        "recipient_004": {
+          "capacity_servings": 45,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_005": {
+          "capacity_servings": 40,
+          "response": "accept",
+          "response_delay_min": 12
+        },
+        "recipient_006": {
+          "capacity_servings": 30,
+          "response": "decline",
+          "response_delay_min": 5
+        },
+        "recipient_007": {
+          "capacity_servings": 50,
+          "response": "accept",
+          "response_delay_min": 1
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": true,
+          "ready_in_min": 8
+        },
+        "driver_002": {
+          "available": true,
+          "ready_in_min": 20
+        },
+        "driver_003": {
+          "available": true,
+          "ready_in_min": 5
+        },
+        "driver_004": {
+          "available": false,
+          "ready_in_min": null
+        }
+      },
+      "expected_narrative": "recipient_002 and recipient_007 answer fastest and have ample capacity, but both are eliminated before ranking - 007 at the reg. 5(1) licence gate, 002 at the reg. 5(2) facilities and Sch. I 2(6) refrigeration gates for perishable food. recipient_001 takes all 40. driver_003 is nearest but has no temperature control, failing Sch. I 2(2); driver_001 carries insulated containers and goes. The agent must also apply pick-up and use-by date marking, since container_date_marked is false.",
+      "expected_outcome": {
+        "servings_rescued": 40,
+        "human_interventions": 0
+      },
+      "capability_replies": {
+        "recipient_002": {
+          "has_valid_licence_or_registration": false
+        }
+      }
+    },
+    "seed_02_split_replan": {
+      "label": "Capacity shortfall forces a replan",
+      "demonstrates": "Replanning from state rather than a hardcoded fallback. The first viable recipient cannot take the whole load.",
+      "scenario_start": "2026-09-14T15:40:00+05:30",
+      "offer": {
+        "offer_id": "offer_02",
+        "donor_id": "donor_corporate_canteen_b",
+        "donor_has_valid_licence": true,
+        "food_type": "prepared_meal",
+        "quantity_servings": 40,
+        "perishable": true,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T19:00:00+05:30",
+        "label": {
+          "food_name": "Mixed vegetable curry and rice",
+          "source": "Corporate Canteen B",
+          "preparation_date": "2026-09-14T12:30:00+05:30",
+          "last_consumption_date": "2026-09-14T19:00:00+05:30",
+          "vegetarian": true,
+          "masked": false
+        },
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": true
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 15,
+          "response": "accept",
+          "response_delay_min": 3
+        },
+        "recipient_002": {
+          "capacity_servings": 80,
+          "response": "accept",
+          "response_delay_min": 2
+        },
+        "recipient_003": {
+          "capacity_servings": 25,
+          "response": "accept",
+          "response_delay_min": 7
+        },
+        "recipient_004": {
+          "capacity_servings": 45,
+          "response": "decline",
+          "response_delay_min": 6
+        },
+        "recipient_005": {
+          "capacity_servings": 40,
+          "response": "decline",
+          "response_delay_min": 5
+        },
+        "recipient_006": {
+          "capacity_servings": 30,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_007": {
+          "capacity_servings": 50,
+          "response": "accept",
+          "response_delay_min": 1
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": true,
+          "ready_in_min": 6
+        },
+        "driver_002": {
+          "available": true,
+          "ready_in_min": 14
+        },
+        "driver_003": {
+          "available": true,
+          "ready_in_min": 4
+        },
+        "driver_004": {
+          "available": false,
+          "ready_in_min": null
+        }
+      },
+      "expected_narrative": "recipient_001 accepts but can take only 15 of 40. The agent must not stop at a partial rescue. recipient_005 has unknown reheating capability; the agent confirms it (true), then recipient_005 declines anyway - a confirmed-capable recipient can still refuse, and neither event is an escalation. The agent regenerates candidates and places the remaining 25 with recipient_003. Both legs require a temperature-controlled vehicle.",
+      "expected_outcome": {
+        "servings_rescued": 40,
+        "human_interventions": 0,
+        "note": "One confirmation step is acceptable here and should be logged as a confirmation, not an escalation."
+      },
+      "capability_replies": {
+        "recipient_002": {
+          "has_valid_licence_or_registration": false
+        },
+        "recipient_005": {
+          "has_reheating_facilities": true
+        }
+      }
+    },
+    "seed_03_transport_escalation": {
+      "label": "No lawful transport before the deadline",
+      "demonstrates": "Correct escalation. A willing recipient exists, so the failure is not the absence of demand.",
+      "scenario_start": "2026-09-14T17:35:00+05:30",
+      "offer": {
+        "offer_id": "offer_03",
+        "donor_id": "donor_wedding_caterer_c",
+        "donor_has_valid_licence": true,
+        "food_type": "prepared_meal",
+        "quantity_servings": 40,
+        "perishable": true,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T19:00:00+05:30",
+        "label": {
+          "food_name": "Paneer curry, rice and rotis",
+          "source": "Caterer C banquet kitchen",
+          "preparation_date": "2026-09-14T15:00:00+05:30",
+          "last_consumption_date": "2026-09-14T19:00:00+05:30",
+          "vegetarian": true,
+          "masked": false
+        },
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": true
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 60,
+          "response": "accept",
+          "response_delay_min": 5
+        },
+        "recipient_002": {
+          "capacity_servings": 80,
+          "response": "accept",
+          "response_delay_min": 2
+        },
+        "recipient_003": {
+          "capacity_servings": 25,
+          "response": "accept",
+          "response_delay_min": 8
+        },
+        "recipient_004": {
+          "capacity_servings": 45,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_005": {
+          "capacity_servings": 40,
+          "response": "accept",
+          "response_delay_min": 10
+        },
+        "recipient_006": {
+          "capacity_servings": 30,
+          "response": "accept",
+          "response_delay_min": 6
+        },
+        "recipient_007": {
+          "capacity_servings": 50,
+          "response": "accept",
+          "response_delay_min": 1
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": false,
+          "ready_in_min": null
+        },
+        "driver_002": {
+          "available": false,
+          "ready_in_min": null
+        },
+        "driver_003": {
+          "available": true,
+          "ready_in_min": 3
+        },
+        "driver_004": {
+          "available": true,
+          "ready_in_min": 7
+        }
+      },
+      "expected_narrative": "recipient_001 accepts all 40 within a workable window. Transport is the binding constraint: driver_003 is available and fast but carries no temperature control (Sch. I 2(2)); driver_004 has refrigeration but is not sanitised, failing regardless of load. Both temperature-capable sanitised vehicles are unavailable. The agent cannot lawfully complete this and must escalate with the specific reason, the identified recipient, the time remaining, and the options a human could authorise.",
+      "expected_outcome": {
+        "servings_rescued": 0,
+        "human_interventions": 1,
+        "escalation_reason": "No available vehicle satisfies Sch. I 2(2) transport conditions for perishable food before the 19:00 consumption deadline.",
+        "human_options": [
+          "Authorise a non-perishable-only partial handoff if any part of the load qualifies",
+          "Extend by sourcing an insulated container to pair with driver_003",
+          "Stand down the rescue and direct the donor to Sch. I 2(4) disposal handling"
+        ]
+      },
+      "capability_replies": {}
+    }
+  },
+  "metrics_rollup": {
+    "note": "Report across all three seeds. This is the honest version of the headline number.",
+    "rescues_attempted": 3,
+    "completed_autonomously": 2,
+    "correctly_escalated": 1,
+    "human_intervention_rate": "1 of 3",
+    "framing": "Do not report 100 percent success. Two autonomous completions and one correct refusal is the stronger claim, because the refusal is the behaviour the brief asks for."
+  }
+}

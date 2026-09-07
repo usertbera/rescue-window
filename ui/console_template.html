@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RescueWindow — rescue console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --steel-900:#131C24; --steel-850:#17222B; --steel-800:#1B2731;
+  --steel-700:#233240; --steel-600:#2E3F4C;
+  --ice:#E4EDF2; --haze:#8298A8; --dim:#5D7284;
+  --chill:#4FB8C9; --ember:#E9A13B; --moss:#6FBF8B; --clay:#C9657A;
+  --sans:"IBM Plex Sans",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--steel-900); color:var(--ice);
+  font-family:var(--sans); font-size:15px; line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--chill)}
+:focus-visible{outline:2px solid var(--chill); outline-offset:2px}
+
+.shell{max-width:1180px;margin:0 auto;padding:28px 24px 64px}
+
+header.masthead{
+  display:flex;flex-wrap:wrap;gap:20px;align-items:flex-end;
+  justify-content:space-between;
+  border-bottom:1px solid var(--steel-600);padding-bottom:18px;margin-bottom:24px;
+}
+.wordmark{font-size:21px;font-weight:600;letter-spacing:-.01em;margin:0}
+.tagline{color:var(--haze);font-size:13.5px;margin:4px 0 0;max-width:52ch}
+
+.switch{display:flex;gap:0;border:1px solid var(--steel-600);border-radius:3px;overflow:hidden}
+.switch button{
+  font-family:var(--sans);font-size:13px;font-weight:500;
+  background:var(--steel-850);color:var(--haze);
+  border:0;border-right:1px solid var(--steel-600);
+  padding:9px 15px;cursor:pointer;transition:background .12s,color .12s;
+}
+.switch button:last-child{border-right:0}
+.switch button:hover{color:var(--ice)}
+.switch button[aria-pressed="true"]{background:var(--steel-700);color:var(--ice)}
+
+.grid{display:grid;grid-template-columns:1fr 292px;gap:28px;align-items:start}
+@media(max-width:880px){.grid{grid-template-columns:1fr}}
+
+/* ---------- right rail ---------- */
+.rail{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px}
+@media(max-width:880px){.rail{position:static}}
+
+.clock{border:1px solid var(--steel-600);border-radius:3px;padding:18px 18px 16px;background:var(--steel-850)}
+.clock .num{
+  font-family:var(--mono);font-variant-numeric:tabular-nums;
+  font-size:46px;line-height:1;color:var(--ember);letter-spacing:-.02em;
+}
+.clock .cap{color:var(--haze);font-size:12.5px;margin-top:7px}
+.clock.expired .num{color:var(--clay)}
+.bar{height:3px;background:var(--steel-700);margin-top:14px;border-radius:2px;overflow:hidden}
+.bar span{display:block;height:100%;background:var(--ember);transition:width .3s linear}
+
+.panel{border:1px solid var(--steel-600);border-radius:3px;background:var(--steel-850)}
+.panel h2{
+  font-size:12.5px;font-weight:600;color:var(--haze);margin:0;
+  padding:11px 16px;border-bottom:1px solid var(--steel-600);
+}
+.panel .body{padding:13px 16px 15px}
+dl.facts{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13.5px}
+dl.facts dt{color:var(--dim)}
+dl.facts dd{margin:0;text-align:right;font-family:var(--mono);font-size:13px}
+
+.legend{display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--haze)}
+.legend div{display:flex;align-items:center;gap:10px}
+
+.metric{display:flex;justify-content:space-between;font-size:13.5px;padding:4px 0}
+.metric b{font-family:var(--mono);font-weight:500}
+.footnote{color:var(--dim);font-size:12px;margin:10px 0 0;line-height:1.45}
+
+/* ---------- glyphs ---------- */
+.g{width:11px;height:11px;flex:0 0 11px;display:inline-block}
+.g-fact{background:var(--ice)}
+.g-agent{border:1.5px solid var(--chill);border-radius:50%}
+.g-policy{height:3px;margin-top:4px;background:var(--chill)}
+.g-replan{background:none;color:var(--haze);font-size:12px;line-height:11px;text-align:center}
+.g-human{background:var(--ember);transform:rotate(45deg)}
+.g-close{background:var(--moss)}
+
+/* ---------- stream ---------- */
+.stream{border:1px solid var(--steel-600);border-radius:3px;background:var(--steel-850);min-height:440px}
+.stream .head{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  padding:11px 16px;border-bottom:1px solid var(--steel-600);
+}
+.stream .head h2{font-size:14px;font-weight:600;margin:0}
+.stream .head .sub{color:var(--haze);font-size:12.5px;margin:2px 0 0}
+.ctrl{
+  font-family:var(--sans);font-size:12.5px;font-weight:500;
+  background:var(--steel-700);color:var(--ice);border:1px solid var(--steel-600);
+  border-radius:3px;padding:6px 13px;cursor:pointer;
+}
+.ctrl:hover{background:var(--steel-600)}
+
+ol.events{list-style:none;margin:0;padding:6px 0 14px}
+ol.events li{
+  display:grid;grid-template-columns:54px 18px 1fr;gap:0 11px;
+  padding:5px 16px 5px 14px;align-items:start;
+  border-left:2px solid transparent;cursor:pointer;
+}
+ol.events li:hover{background:var(--steel-800)}
+ol.events li[aria-expanded="true"]{background:var(--steel-800);border-left-color:var(--chill)}
+.t{font-family:var(--mono);font-size:12.5px;color:var(--dim);padding-top:2px;font-variant-numeric:tabular-nums}
+.gcell{padding-top:5px}
+.txt{font-size:13.5px;min-width:0}
+.txt .what{color:var(--ice)}
+.txt .who{font-family:var(--mono);font-size:12.5px;color:var(--chill)}
+li.cat-policy .txt .what{color:#CFE3E8}
+li.cat-replan .txt .what{color:var(--haze);font-style:italic}
+li.cat-close .txt .what{color:var(--moss)}
+
+.why{
+  grid-column:3;margin:8px 0 6px;padding:12px 14px;
+  border:1px solid var(--steel-600);border-left:2px solid var(--chill);
+  border-radius:2px;background:var(--steel-900);font-size:13px;
+}
+.why dt{color:var(--dim);font-size:12px;margin-top:8px}
+.why dt:first-child{margin-top:0}
+.why dd{margin:2px 0 0;font-family:var(--mono);font-size:12.5px;color:var(--ice);word-break:break-word}
+
+/* ---------- escalation ---------- */
+.esc{
+  grid-column:1/-1;margin:12px 14px 6px;padding:16px 18px;
+  border:1px solid var(--ember);border-radius:3px;background:rgba(233,161,59,.06);
+}
+.esc h3{margin:0 0 4px;font-size:15px;font-weight:600;color:var(--ember)}
+.esc .lede{margin:0 0 13px;font-size:13.5px;color:var(--ice)}
+.esc .opts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.esc .opts button{
+  font-family:var(--sans);font-size:13px;background:transparent;color:var(--ember);
+  border:1px solid rgba(233,161,59,.5);border-radius:3px;padding:7px 13px;cursor:pointer;
+}
+.esc .opts button:hover{background:rgba(233,161,59,.12)}
+.esc .reason{border-top:1px solid rgba(233,161,59,.25);padding-top:11px;font-size:13px;color:var(--haze)}
+.esc .reason p{margin:0 0 3px}
+.esc .reason strong{color:var(--ice);font-weight:500}
+
+.provenance{
+  margin-top:26px;padding-top:16px;border-top:1px solid var(--steel-600);
+  color:var(--dim);font-size:12.5px;line-height:1.55;max-width:78ch;
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<header class="masthead">
+  <div>
+    <h1 class="wordmark">RescueWindow</h1>
+    <p class="tagline">Surplus food has a deadline. The agent finds a lawful recipient, arranges compliant transport, and asks a person only when no safe plan is left.</p>
+  </div>
+  <div class="switch" id="switch" role="group" aria-label="Choose a scenario"></div>
+</header>
+
+<div class="grid">
+  <main>
+    <section class="stream">
+      <div class="head">
+        <div>
+          <h2 id="run-title">—</h2>
+          <p class="sub" id="run-sub">—</p>
+        </div>
+        <button class="ctrl" id="replay">Replay</button>
+      </div>
+      <ol class="events" id="events"></ol>
+    </section>
+    <p class="provenance">
+      Recipient organisations are drawn from public directories; operational
+      capabilities and all message traffic are simulated. Safety decisions are
+      made in deterministic code against the Food Safety and Standards
+      (Recovery and Distribution of Surplus Food) Regulations, 2019, not by the
+      language model.
+    </p>
+  </main>
+
+  <aside class="rail">
+    <div class="clock" id="clock">
+      <div class="num" id="cd">—:—</div>
+      <div class="cap" id="cdcap">until the food is no longer fit to serve</div>
+      <div class="bar"><span id="cdbar" style="width:100%"></span></div>
+    </div>
+
+    <div class="panel">
+      <h2>This offer</h2>
+      <div class="body"><dl class="facts" id="facts"></dl></div>
+    </div>
+
+    <div class="panel">
+      <h2>Reading the stream</h2>
+      <div class="body legend">
+        <div><i class="g g-fact"></i>Something became known</div>
+        <div><i class="g g-agent"></i>The agent acted</div>
+        <div><i class="g g-policy"></i>A safety rule decided</div>
+        <div><i class="g g-replan">↺</i>Plan rebuilt from state</div>
+        <div><i class="g g-human"></i>Handed to a person</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Across all three runs</h2>
+      <div class="body" id="metrics"></div>
+    </div>
+  </aside>
+</div>
+</div>
+
+<script>
+const DATA = /*__DATA__*/ null;
+
+const $ = s => document.querySelector(s);
+const el = (t, c) => { const n = document.createElement(t); if (c) n.className = c; return n; };
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+let active = 0, timer = null, expanded = null;
+
+function mins(hhmm){ const [h,m] = hhmm.split(':').map(Number); return h*60+m; }
+function fmt(m){ if (m < 0) m = 0; return `${Math.floor(m/60)}:${String(m%60).padStart(2,'0')}`; }
+
+/* ---- scenario switcher ---- */
+DATA.runs.forEach((r, i) => {
+  const b = el('button');
+  b.textContent = r.label;
+  b.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
+  b.onclick = () => select(i);
+  $('#switch').appendChild(b);
+});
+
+function select(i){
+  active = i; expanded = null;
+  [...$('#switch').children].forEach((b, j) =>
+    b.setAttribute('aria-pressed', j === i ? 'true' : 'false'));
+  render();
+}
+
+/* ---- static panels ---- */
+function renderFacts(run){
+  const o = run.offer, d = run.outcome;
+  const rows = [
+    ['Food', o.food_name],
+    ['Quantity', `${o.servings} servings`],
+    ['Safe until', o.deadline],
+    ['Window', `${Math.floor(o.window_min/60)}h ${o.window_min%60}m`],
+    ['Delivered', `${d.delivered}/${d.offered}`],
+    ['Replans', d.replans],
+  ];
+  $('#facts').innerHTML = rows.map(([k,v]) =>
+    `<dt>${k}</dt><dd>${v}</dd>`).join('');
+}
+
+function renderMetrics(){
+  const m = DATA.metrics;
+  $('#metrics').innerHTML =
+    `<div class="metric"><span>Ran without a person</span><b>${m.completed_without_human} of ${m.scenarios}</b></div>` +
+    `<div class="metric"><span>Handed to a person</span><b>${m.interventions} of ${m.decision_points}</b></div>` +
+    `<div class="metric"><span>Servings delivered</span><b>${m.servings_delivered} of ${m.servings_offered}</b></div>` +
+    `<div class="metric"><span>Plans rebuilt</span><b>${m.replans}</b></div>` +
+    `<p class="footnote">Three hand-built scenarios. Too few for a percentage, so these stay as counts.</p>`;
+}
+
+/* ---- countdown ---- */
+function tick(run, at){
+  const left = mins(run.offer.deadline) - mins(at);
+  const total = run.offer.window_min;
+  $('#cd').textContent = fmt(left);
+  $('#cdbar').style.width = Math.max(0, Math.min(100, left/total*100)) + '%';
+  $('#clock').classList.toggle('expired', left <= 0);
+  $('#cdcap').textContent = left <= 0
+    ? 'the serving window has closed'
+    : 'until the food is no longer fit to serve';
+}
+
+/* ---- event rows ---- */
+function subject(e){
+  return e.recipient_id || e.driver_id || '';
+}
+
+function row(e, run){
+  const li = el('li', 'cat-' + e.category);
+  li.tabIndex = 0;
+  li.setAttribute('aria-expanded', 'false');
+
+  const t = el('div','t'); t.textContent = e.at;
+  const g = el('div','gcell');
+  const i = el('i','g g-' + e.category);
+  if (e.category === 'replan') i.textContent = '↺';
+  g.appendChild(i);
+
+  const txt = el('div','txt');
+  const who = subject(e);
+  txt.innerHTML = (who ? `<span class="who">${who}</span> ` : '') +
+                  `<span class="what">${escape_(e.detail)}</span>`;
+
+  li.append(t, g, txt);
+
+  const open = () => {
+    if (expanded === e.i){ li.querySelector('.why')?.remove();
+      li.setAttribute('aria-expanded','false'); expanded = null; return; }
+    document.querySelectorAll('.why').forEach(n => n.remove());
+    document.querySelectorAll('ol.events li').forEach(n => n.setAttribute('aria-expanded','false'));
+    li.appendChild(why(e));
+    li.setAttribute('aria-expanded','true');
+    expanded = e.i;
+  };
+  li.onclick = ev => { if (ev.target.tagName !== 'BUTTON') open(); };
+  li.onkeydown = ev => { if (ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); open(); } };
+
+  if (e.category === 'human') li.appendChild(escalation(e, run));
+  return li;
+}
+
+function why(e){
+  const d = el('dl','why');
+  const add = (k,v) => { if (!v && v !== false) return;
+    const dt = el('dt'); dt.textContent = k;
+    const dd = el('dd'); dd.textContent = v; d.append(dt, dd); };
+  add('Event', e.type);
+  add('Kind', e.category_label);
+  add('Scenario time', e.at);
+  add('Rule applied', e.policy_ref);
+  add('Decision boundary', e.decision_point ? 'yes — a person was asked' : 'no — resolved by the agent');
+  return d;
+}
+
+function escalation(e, run){
+  const box = el('div','esc');
+  const h = el('h3'); h.textContent = 'A person needs to decide';
+  const lede = el('p','lede');
+  lede.textContent = `${e.unplaced} servings are still unplaced and the food stops being fit to serve at ${run.offer.deadline}.`;
+  const opts = el('div','opts');
+  (e.options || []).forEach(o => { const b = el('button'); b.textContent = o; opts.appendChild(b); });
+
+  const reason = el('div','reason');
+  const rep = run.outcome.replans, dp = run.outcome.decision_points;
+  reason.innerHTML =
+    `<p>Why the agent stopped</p>` +
+    `<p><strong>${rep} plans</strong> were built and discarded across <strong>${dp} decision points</strong>.</p>` +
+    `<p>Every remaining option failed a mandatory rule, so no lawful plan is left to try.</p>`;
+  box.append(h, lede, opts, reason);
+  return box;
+}
+
+function escape_(s){ const d = el('div'); d.textContent = s; return d.innerHTML; }
+
+/* ---- playback ---- */
+function render(){
+  clearTimeout(timer);
+  const run = DATA.runs[active];
+  $('#run-title').textContent = run.label;
+  $('#run-sub').textContent = `${run.offer.servings} servings from ${run.offer.start}, safe until ${run.offer.deadline}`;
+  renderFacts(run); renderMetrics();
+  $('#events').innerHTML = '';
+  tick(run, run.offer.start);
+
+  if (reduced){ run.events.forEach(e => $('#events').appendChild(row(e, run)));
+    tick(run, run.events[run.events.length-1].at); return; }
+
+  let k = 0;
+  const step = () => {
+    if (k >= run.events.length) return;
+    const e = run.events[k];
+    const li = row(e, run);
+    $('#events').appendChild(li);
+    tick(run, e.at);
+    const next = run.events[k+1];
+    const gap = next ? Math.max(0, mins(next.at) - mins(e.at)) : 0;
+    k++;
+    timer = setTimeout(step, Math.min(1100, Math.max(130, gap * 1000/60)));
+  };
+  step();
+}
+
+$('#replay').onclick = render;
+select(0);
+</script>
+</body>
+</html>

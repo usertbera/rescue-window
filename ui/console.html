@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RescueWindow — rescue console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --steel-900:#131C24; --steel-850:#17222B; --steel-800:#1B2731;
+  --steel-700:#233240; --steel-600:#2E3F4C;
+  --ice:#E4EDF2; --haze:#8298A8; --dim:#5D7284;
+  --chill:#4FB8C9; --ember:#E9A13B; --moss:#6FBF8B; --clay:#C9657A;
+  --sans:"IBM Plex Sans",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--steel-900); color:var(--ice);
+  font-family:var(--sans); font-size:15px; line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--chill)}
+:focus-visible{outline:2px solid var(--chill); outline-offset:2px}
+
+.shell{max-width:1180px;margin:0 auto;padding:28px 24px 64px}
+
+header.masthead{
+  display:flex;flex-wrap:wrap;gap:20px;align-items:flex-end;
+  justify-content:space-between;
+  border-bottom:1px solid var(--steel-600);padding-bottom:18px;margin-bottom:24px;
+}
+.wordmark{font-size:21px;font-weight:600;letter-spacing:-.01em;margin:0}
+.tagline{color:var(--haze);font-size:13.5px;margin:4px 0 0;max-width:52ch}
+
+.switch{display:flex;gap:0;border:1px solid var(--steel-600);border-radius:3px;overflow:hidden}
+.switch button{
+  font-family:var(--sans);font-size:13px;font-weight:500;
+  background:var(--steel-850);color:var(--haze);
+  border:0;border-right:1px solid var(--steel-600);
+  padding:9px 15px;cursor:pointer;transition:background .12s,color .12s;
+}
+.switch button:last-child{border-right:0}
+.switch button:hover{color:var(--ice)}
+.switch button[aria-pressed="true"]{background:var(--steel-700);color:var(--ice)}
+
+.grid{display:grid;grid-template-columns:1fr 292px;gap:28px;align-items:start}
+@media(max-width:880px){.grid{grid-template-columns:1fr}}
+
+/* ---------- right rail ---------- */
+.rail{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px}
+@media(max-width:880px){.rail{position:static}}
+
+.clock{border:1px solid var(--steel-600);border-radius:3px;padding:18px 18px 16px;background:var(--steel-850)}
+.clock .num{
+  font-family:var(--mono);font-variant-numeric:tabular-nums;
+  font-size:46px;line-height:1;color:var(--ember);letter-spacing:-.02em;
+}
+.clock .cap{color:var(--haze);font-size:12.5px;margin-top:7px}
+.clock.expired .num{color:var(--clay)}
+.bar{height:3px;background:var(--steel-700);margin-top:14px;border-radius:2px;overflow:hidden}
+.bar span{display:block;height:100%;background:var(--ember);transition:width .3s linear}
+
+.panel{border:1px solid var(--steel-600);border-radius:3px;background:var(--steel-850)}
+.panel h2{
+  font-size:12.5px;font-weight:600;color:var(--haze);margin:0;
+  padding:11px 16px;border-bottom:1px solid var(--steel-600);
+}
+.panel .body{padding:13px 16px 15px}
+dl.facts{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13.5px}
+dl.facts dt{color:var(--dim)}
+dl.facts dd{margin:0;text-align:right;font-family:var(--mono);font-size:13px}
+
+.legend{display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--haze)}
+.legend div{display:flex;align-items:center;gap:10px}
+
+.metric{display:flex;justify-content:space-between;font-size:13.5px;padding:4px 0}
+.metric b{font-family:var(--mono);font-weight:500}
+.footnote{color:var(--dim);font-size:12px;margin:10px 0 0;line-height:1.45}
+
+/* ---------- glyphs ---------- */
+.g{width:11px;height:11px;flex:0 0 11px;display:inline-block}
+.g-fact{background:var(--ice)}
+.g-agent{border:1.5px solid var(--chill);border-radius:50%}
+.g-policy{height:3px;margin-top:4px;background:var(--chill)}
+.g-replan{background:none;color:var(--haze);font-size:12px;line-height:11px;text-align:center}
+.g-human{background:var(--ember);transform:rotate(45deg)}
+.g-close{background:var(--moss)}
+
+/* ---------- stream ---------- */
+.stream{border:1px solid var(--steel-600);border-radius:3px;background:var(--steel-850);min-height:440px}
+.stream .head{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  padding:11px 16px;border-bottom:1px solid var(--steel-600);
+}
+.stream .head h2{font-size:14px;font-weight:600;margin:0}
+.stream .head .sub{color:var(--haze);font-size:12.5px;margin:2px 0 0}
+.ctrl{
+  font-family:var(--sans);font-size:12.5px;font-weight:500;
+  background:var(--steel-700);color:var(--ice);border:1px solid var(--steel-600);
+  border-radius:3px;padding:6px 13px;cursor:pointer;
+}
+.ctrl:hover{background:var(--steel-600)}
+
+ol.events{list-style:none;margin:0;padding:6px 0 14px}
+ol.events li{
+  display:grid;grid-template-columns:54px 18px 1fr;gap:0 11px;
+  padding:5px 16px 5px 14px;align-items:start;
+  border-left:2px solid transparent;cursor:pointer;
+}
+ol.events li:hover{background:var(--steel-800)}
+ol.events li[aria-expanded="true"]{background:var(--steel-800);border-left-color:var(--chill)}
+.t{font-family:var(--mono);font-size:12.5px;color:var(--dim);padding-top:2px;font-variant-numeric:tabular-nums}
+.gcell{padding-top:5px}
+.txt{font-size:13.5px;min-width:0}
+.txt .what{color:var(--ice)}
+.txt .who{font-family:var(--mono);font-size:12.5px;color:var(--chill)}
+li.cat-policy .txt .what{color:#CFE3E8}
+li.cat-replan .txt .what{color:var(--haze);font-style:italic}
+li.cat-close .txt .what{color:var(--moss)}
+
+.why{
+  grid-column:3;margin:8px 0 6px;padding:12px 14px;
+  border:1px solid var(--steel-600);border-left:2px solid var(--chill);
+  border-radius:2px;background:var(--steel-900);font-size:13px;
+}
+.why dt{color:var(--dim);font-size:12px;margin-top:8px}
+.why dt:first-child{margin-top:0}
+.why dd{margin:2px 0 0;font-family:var(--mono);font-size:12.5px;color:var(--ice);word-break:break-word}
+
+/* ---------- escalation ---------- */
+.esc{
+  grid-column:1/-1;margin:12px 14px 6px;padding:16px 18px;
+  border:1px solid var(--ember);border-radius:3px;background:rgba(233,161,59,.06);
+}
+.esc h3{margin:0 0 4px;font-size:15px;font-weight:600;color:var(--ember)}
+.esc .lede{margin:0 0 13px;font-size:13.5px;color:var(--ice)}
+.esc .opts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.esc .opts button{
+  font-family:var(--sans);font-size:13px;background:transparent;color:var(--ember);
+  border:1px solid rgba(233,161,59,.5);border-radius:3px;padding:7px 13px;cursor:pointer;
+}
+.esc .opts button:hover{background:rgba(233,161,59,.12)}
+.esc .reason{border-top:1px solid rgba(233,161,59,.25);padding-top:11px;font-size:13px;color:var(--haze)}
+.esc .reason p{margin:0 0 3px}
+.esc .reason strong{color:var(--ice);font-weight:500}
+
+.provenance{
+  margin-top:26px;padding-top:16px;border-top:1px solid var(--steel-600);
+  color:var(--dim);font-size:12.5px;line-height:1.55;max-width:78ch;
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<header class="masthead">
+  <div>
+    <h1 class="wordmark">RescueWindow</h1>
+    <p class="tagline">Surplus food has a deadline. The agent finds a lawful recipient, arranges compliant transport, and asks a person only when no safe plan is left.</p>
+  </div>
+  <div class="switch" id="switch" role="group" aria-label="Choose a scenario"></div>
+</header>
+
+<div class="grid">
+  <main>
+    <section class="stream">
+      <div class="head">
+        <div>
+          <h2 id="run-title">—</h2>
+          <p class="sub" id="run-sub">—</p>
+        </div>
+        <button class="ctrl" id="replay">Replay</button>
+      </div>
+      <ol class="events" id="events"></ol>
+    </section>
+    <p class="provenance">
+      Recipient organisations are drawn from public directories; operational
+      capabilities and all message traffic are simulated. Safety decisions are
+      made in deterministic code against the Food Safety and Standards
+      (Recovery and Distribution of Surplus Food) Regulations, 2019, not by the
+      language model.
+    </p>
+  </main>
+
+  <aside class="rail">
+    <div class="clock" id="clock">
+      <div class="num" id="cd">—:—</div>
+      <div class="cap" id="cdcap">until the food is no longer fit to serve</div>
+      <div class="bar"><span id="cdbar" style="width:100%"></span></div>
+    </div>
+
+    <div class="panel">
+      <h2>This offer</h2>
+      <div class="body"><dl class="facts" id="facts"></dl></div>
+    </div>
+
+    <div class="panel">
+      <h2>Reading the stream</h2>
+      <div class="body legend">
+        <div><i class="g g-fact"></i>Something became known</div>
+        <div><i class="g g-agent"></i>The agent acted</div>
+        <div><i class="g g-policy"></i>A safety rule decided</div>
+        <div><i class="g g-replan">↺</i>Plan rebuilt from state</div>
+        <div><i class="g g-human"></i>Handed to a person</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Across all three runs</h2>
+      <div class="body" id="metrics"></div>
+    </div>
+  </aside>
+</div>
+</div>
+
+<script>
+const DATA = {"runs":[{"seed_id":"seed_01_clean_rescue","label":"Straightforward rescue","demonstrates":"","offer":{"servings":40,"food_type":"prepared_meal","vegetarian":true,"food_name":"Vegetable pulao and dal","start":"15:10","deadline":"19:00","window_min":230},"outcome":{"delivered":40,"offered":40,"interventions":0,"decision_points":3,"replans":2,"confirmations":2,"unresolved":1,"closed_reason":"all servings placed"},"events":[{"i":0,"at":"15:10","iso":"2026-09-14T15:10:00+05:30","type":"OFFER_RECEIVED","category":"fact","category_label":"Fact","detail":"40 servings, prepared_meal, deadline 19:00.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":1,"at":"15:11","iso":"2026-09-14T15:11:00+05:30","type":"SAFETY_CHECK","category":"policy","category_label":"Policy gate","detail":"PASS (conditional: apply pick-up date and use-by date marking to containers before dispatch)","policy_ref":"FSSAI Surplus Food Regs 2019","decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":2,"at":"15:11","iso":"2026-09-14T15:11:00+05:30","type":"SAFETY_CHECK","category":"policy","category_label":"Policy gate","detail":"Condition applied: apply pick-up date and use-by date marking to containers before dispatch.","policy_ref":"FSSAI Surplus Food Regs 2019, Sch. I, 2(1)","decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":3,"at":"15:12","iso":"2026-09-14T15:12:00+05:30","type":"CANDIDATES_GENERATED","category":"agent","category_label":"Agent action","detail":"7 candidates evaluated; 4 viable.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":4,"at":"15:13","iso":"2026-09-14T15:13:00+05:30","type":"CONFIRMATION_REQUESTED","category":"agent","category_label":"Agent action","detail":"recipient_002: asking about 'has_valid_licence_or_registration'.","policy_ref":null,"decision_point":false,"recipient_id":"recipient_002","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":5,"at":"15:15","iso":"2026-09-14T15:15:00+05:30","type":"CONFIRMATION_RESOLVED","category":"fact","category_label":"Fact","detail":"recipient_002: 'has_valid_licence_or_registration' = False.","policy_ref":null,"decision_point":false,"recipient_id":"recipient_002","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":6,"at":"15:15","iso":"2026-09-14T15:15:00+05:30","type":"CANDIDATE_ELIMINATED","category":"policy","category_label":"Policy gate","detail":"recipient_002: lacks has_valid_licence_or_registration.","policy_ref":"FSSAI Surplus Food Regs 2019, reg. 5(2)","decision_point":false,"recipient_id":"recipient_002","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":7,"at":"15:16","iso":"2026-09-14T15:16:00+05:30","type":"CANDIDATES_GENERATED","category":"agent","category_label":"Agent action","detail":"6 candidates evaluated; 4 viable.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":8,"at":"15:16","iso":"2026-09-14T15:16:00+05:30","type":"REPLAN","category":"replan","category_label":"Replan","detail":"No plan from this cycle; regenerating candidates. 40 servings unplaced.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":9,"at":"15:17","iso":"2026-09-14T15:17:00+05:30","type":"CANDIDATES_GENERATED","category":"agent","category_label":"Agent action","detail":"6 candidates evaluated; 4 viable.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":10,"at":"15:18","iso":"2026-09-14T15:18:00+05:30","type":"CONFIRMATION_REQUESTED","category":"agent","category_label":"Agent action","detail":"recipient_005: asking about 'has_reheating_facilities'.","policy_ref":null,"decision_point":false,"recipient_id":"recipient_005","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":11,"at":"15:28","iso":"2026-09-14T15:28:00+05:30","type":"CONFIRMATION_UNRESOLVED","category":"fact","category_label":"Fact","detail":"recipient_005: no reply on 'has_reheating_facilities' within 10 min. Eliminated; not an escalation while other candidates remain.","policy_ref":null,"decision_point":false,"recipient_id":"recipient_005","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":12,"at":"15:29","iso":"2026-09-14T15:29:00+05:30","type":"CANDIDATES_GENERATED","category":"agent","category_label":"Agent action","detail":"5 candidates evaluated; 4 viable.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":13,"at":"15:29","iso":"2026-09-14T15:29:00+05:30","type":"REPLAN","category":"replan","category_label":"Replan","detail":"No plan from this cycle; regenerating candidates. 40 servings unplaced.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":14,"at":"15:30","iso":"2026-09-14T15:30:00+05:30","type":"CANDIDATES_GENERATED","category":"agent","category_label":"Agent action","detail":"5 candidates evaluated; 4 viable.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":15,"at":"15:31","iso":"2026-09-14T15:31:00+05:30","type":"OUTREACH_SENT","category":"agent","category_label":"Agent action","detail":"recipient_001: requesting 40 servings.","policy_ref":null,"decision_point":false,"recipient_id":"recipient_001","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":16,"at":"15:35","iso":"2026-09-14T15:35:00+05:30","type":"OUTREACH_ACCEPTED","category":"fact","category_label":"Fact","detail":"recipient_001: accepts 40 of 40 (capacity 60).","policy_ref":null,"decision_point":false,"recipient_id":"recipient_001","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":17,"at":"15:35","iso":"2026-09-14T15:35:00+05:30","type":"TRANSPORT_REJECTED","category":"policy","category_label":"Policy gate","detail":"driver_003: Perishable food requires temperature control; vehicle has neither active temperature control nor insulated containers or ice packs.","policy_ref":"FSSAI Surplus Food Regs 2019, Sch. I, 2(2)","decision_point":false,"recipient_id":null,"driver_id":"driver_003","options":null,"minutes_remaining":null,"unplaced":null},{"i":18,"at":"15:35","iso":"2026-09-14T15:35:00+05:30","type":"TRANSPORT_REJECTED","category":"policy","category_label":"Policy gate","detail":"driver_004: Vehicle is not clean and sanitised.","policy_ref":"FSSAI Surplus Food Regs 2019, Sch. I, 2(2)","decision_point":false,"recipient_id":null,"driver_id":"driver_004","options":null,"minutes_remaining":null,"unplaced":null},{"i":19,"at":"15:36","iso":"2026-09-14T15:36:00+05:30","type":"TRANSPORT_SELECTED","category":"agent","category_label":"Agent action","detail":"driver_001: pickup 15:54, delivery ETA 16:04.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":"driver_001","options":null,"minutes_remaining":null,"unplaced":null},{"i":20,"at":"15:37","iso":"2026-09-14T15:37:00+05:30","type":"PLAN_COMMITTED","category":"agent","category_label":"Agent action","detail":"40 servings -> recipient_001 via driver_001, ETA 16:04.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":21,"at":"15:37","iso":"2026-09-14T15:37:00+05:30","type":"PICKUP_VERIFIED","category":"fact","category_label":"Fact","detail":"driver_001: collected 40 servings.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":"driver_001","options":null,"minutes_remaining":null,"unplaced":null},{"i":22,"at":"16:04","iso":"2026-09-14T16:04:38.780022+05:30","type":"DELIVERY_VERIFIED","category":"fact","category_label":"Fact","detail":"recipient_001: 40 servings delivered.","policy_ref":null,"decision_point":false,"recipient_id":"recipient_001","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":23,"at":"16:04","iso":"2026-09-14T16:04:38.780022+05:30","type":"RESCUE_CLOSED","category":"close","category_label":"Closed","detail":"40/40 servings delivered. all servings placed.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null}]},{"seed_id":"seed_02_split_replan","label":"Capacity shortfall forces a replan","demonstrates":"","offer":{"servings":40,"food_type":"prepared_meal","vegetarian":true,"food_name":"Mixed vegetable curry and rice","start":"15:40","deadline":"19:00","window_min":200},"outcome":{"delivered":40,"offered":40,"interventions":0,"decision_points":5,"replans":3,"confirmations":2,"unresolved":0,"closed_reason":"all servings placed"},"events":[{"i":0,"at":"15:40","iso":"2026-09-14T15:40:00+05:30","type":"OFFER_RECEIVED","category":"fact","category_label":"Fact","detail":"40 servings, prepared_meal, deadline 19:00.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":1,"at":"15:41","iso":"2026-09-14T15:41:00+05:30","type":"SAFETY_CHECK","category":"policy","category_label":"Policy gate","detail":"PASS","policy_ref":"FSSAI Surplus Food Regs 2019","decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":2,"at":"15:42","iso":"2026-09-14T15:42:00+05:30","type":"CANDIDATES_GENERATED","category":"agent","category_label":"Agent action","detail":"7 candidates evaluated; 4 viable.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":3,"at":"15:43","iso":"2026-09-14T15:43:00+05:30","type":"CONFIRMATION_REQUESTED","category":"agent","category_label":"Agent action","detail":"recipient_002: asking about 'has_valid_licence_or_registration'.","policy_ref":null,"decision_point":false,"recipient_id":"recipient_002","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":4,"at":"15:45","iso":"2026-09-14T15:45:00+05:30","type":"CONFIRMATION_RESOLVED","category":"fact","category_label":"Fact","detail":"recipient_002: 'has_valid_licence_or_registration' = False.","policy_ref":null,"decision_point":false,"recipient_id":"recipient_002","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":5,"at":"15:45","iso":"2026-09-14T15:45:00+05:30","type":"CANDIDATE_ELIMINATED","category":"policy","category_label":"Policy gate","detail":"recipient_002: lacks has_valid_licence_or_registration.","policy_ref":"FSSAI Surplus Food Regs 2019, reg. 5(2)","decision_point":false,"recipient_id":"recipient_002","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":6,"at":"15:46","iso":"2026-09-14T15:46:00+05:30","type":"CANDIDATES_GENERATED","category":"agent","category_label":"Agent action","detail":"6 candidates evaluated; 4 viable.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":7,"at":"15:46","iso":"2026-09-14T15:46:00+05:30","type":"REPLAN","category":"replan","category_label":"Replan","detail":"No plan from this cycle; regenerating candidates. 40 servings unplaced.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":8,"at":"15:47","iso":"2026-09-14T15:47:00+05:30","type":"CANDIDATES_GENERATED","category":"agent","category_label":"Agent action","detail":"6 candidates evaluated; 4 viable.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":9,"at":"15:48","iso":"2026-09-14T15:48:00+05:30","type":"CONFIRMATION_REQUESTED","category":"agent","category_label":"Agent action","detail":"recipient_005: asking about 'has_reheating_facilities'.","policy_ref":null,"decision_point":false,"recipient_id":"recipient_005","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":10,"at":"15:50","iso":"2026-09-14T15:50:00+05:30","type":"CONFIRMATION_RESOLVED","category":"fact","category_label":"Fact","detail":"recipient_005: 'has_reheating_facilities' = True.","policy_ref":null,"decision_point":false,"recipient_id":"recipient_005","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":11,"at":"15:51","iso":"2026-09-14T15:51:00+05:30","type":"CANDIDATES_GENERATED","category":"agent","category_label":"Agent action","detail":"6 candidates evaluated; 5 viable.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":12,"at":"15:51","iso":"2026-09-14T15:51:00+05:30","type":"REPLAN","category":"replan","category_label":"Replan","detail":"No plan from this cycle; regenerating candidates. 40 servings unplaced.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":13,"at":"15:52","iso":"2026-09-14T15:52:00+05:30","type":"CANDIDATES_GENERATED","category":"agent","category_label":"Agent action","detail":"6 candidates evaluated; 5 viable.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":14,"at":"15:53","iso":"2026-09-14T15:53:00+05:30","type":"OUTREACH_SENT","category":"agent","category_label":"Agent action","detail":"recipient_001: requesting 40 servings.","policy_ref":null,"decision_point":false,"recipient_id":"recipient_001","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":15,"at":"15:56","iso":"2026-09-14T15:56:00+05:30","type":"OUTREACH_ACCEPTED","category":"fact","category_label":"Fact","detail":"recipient_001: accepts 15 of 40 (capacity 15).","policy_ref":null,"decision_point":false,"recipient_id":"recipient_001","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":16,"at":"15:56","iso":"2026-09-14T15:56:00+05:30","type":"TRANSPORT_REJECTED","category":"policy","category_label":"Policy gate","detail":"driver_003: Perishable food requires temperature control; vehicle has neither active temperature control nor insulated containers or ice packs.","policy_ref":"FSSAI Surplus Food Regs 2019, Sch. I, 2(2)","decision_point":false,"recipient_id":null,"driver_id":"driver_003","options":null,"minutes_remaining":null,"unplaced":null},{"i":17,"at":"15:56","iso":"2026-09-14T15:56:00+05:30","type":"TRANSPORT_REJECTED","category":"policy","category_label":"Policy gate","detail":"driver_004: Vehicle is not clean and sanitised.","policy_ref":"FSSAI Surplus Food Regs 2019, Sch. I, 2(2)","decision_point":false,"recipient_id":null,"driver_id":"driver_004","options":null,"minutes_remaining":null,"unplaced":null},{"i":18,"at":"15:57","iso":"2026-09-14T15:57:00+05:30","type":"TRANSPORT_SELECTED","category":"agent","category_label":"Agent action","detail":"driver_001: pickup 16:13, delivery ETA 16:23.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":"driver_001","options":null,"minutes_remaining":null,"unplaced":null},{"i":19,"at":"15:58","iso":"2026-09-14T15:58:00+05:30","type":"PLAN_COMMITTED","category":"agent","category_label":"Agent action","detail":"15 servings -> recipient_001 via driver_001, ETA 16:23.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":20,"at":"15:58","iso":"2026-09-14T15:58:00+05:30","type":"PICKUP_VERIFIED","category":"fact","category_label":"Fact","detail":"driver_001: collected 15 servings.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":"driver_001","options":null,"minutes_remaining":null,"unplaced":null},{"i":21,"at":"16:23","iso":"2026-09-14T16:23:38.780022+05:30","type":"DELIVERY_VERIFIED","category":"fact","category_label":"Fact","detail":"recipient_001: 15 servings delivered.","policy_ref":null,"decision_point":false,"recipient_id":"recipient_001","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":22,"at":"16:24","iso":"2026-09-14T16:24:38.780022+05:30","type":"CANDIDATES_GENERATED","category":"agent","category_label":"Agent action","detail":"5 candidates evaluated; 4 viable.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":23,"at":"16:25","iso":"2026-09-14T16:25:38.780022+05:30","type":"OUTREACH_SENT","category":"agent","category_label":"Agent action","detail":"recipient_005: requesting 25 servings.","policy_ref":null,"decision_point":false,"recipient_id":"recipient_005","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":24,"at":"16:30","iso":"2026-09-14T16:30:38.780022+05:30","type":"OUTREACH_DECLINED","category":"fact","category_label":"Fact","detail":"recipient_005: declined.","policy_ref":null,"decision_point":false,"recipient_id":"recipient_005","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":25,"at":"16:31","iso":"2026-09-14T16:31:38.780022+05:30","type":"CANDIDATES_GENERATED","category":"agent","category_label":"Agent action","detail":"4 candidates evaluated; 3 viable.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":26,"at":"16:31","iso":"2026-09-14T16:31:38.780022+05:30","type":"REPLAN","category":"replan","category_label":"Replan","detail":"No plan from this cycle; regenerating candidates. 25 servings unplaced.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":27,"at":"16:32","iso":"2026-09-14T16:32:38.780022+05:30","type":"CANDIDATES_GENERATED","category":"agent","category_label":"Agent action","detail":"4 candidates evaluated; 3 viable.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":28,"at":"16:33","iso":"2026-09-14T16:33:38.780022+05:30","type":"OUTREACH_SENT","category":"agent","category_label":"Agent action","detail":"recipient_003: requesting 25 servings.","policy_ref":null,"decision_point":false,"recipient_id":"recipient_003","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":29,"at":"16:40","iso":"2026-09-14T16:40:38.780022+05:30","type":"OUTREACH_ACCEPTED","category":"fact","category_label":"Fact","detail":"recipient_003: accepts 25 of 25 (capacity 25).","policy_ref":null,"decision_point":false,"recipient_id":"recipient_003","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":30,"at":"16:41","iso":"2026-09-14T16:41:38.780022+05:30","type":"TRANSPORT_SELECTED","category":"agent","category_label":"Agent action","detail":"driver_002: pickup 17:21, delivery ETA 17:43.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":"driver_002","options":null,"minutes_remaining":null,"unplaced":null},{"i":31,"at":"16:42","iso":"2026-09-14T16:42:38.780022+05:30","type":"PLAN_COMMITTED","category":"agent","category_label":"Agent action","detail":"25 servings -> recipient_003 via driver_002, ETA 17:43.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":32,"at":"16:42","iso":"2026-09-14T16:42:38.780022+05:30","type":"PICKUP_VERIFIED","category":"fact","category_label":"Fact","detail":"driver_002: collected 25 servings.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":"driver_002","options":null,"minutes_remaining":null,"unplaced":null},{"i":33,"at":"17:43","iso":"2026-09-14T17:43:45.594656+05:30","type":"DELIVERY_VERIFIED","category":"fact","category_label":"Fact","detail":"recipient_003: 25 servings delivered.","policy_ref":null,"decision_point":false,"recipient_id":"recipient_003","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":34,"at":"17:43","iso":"2026-09-14T17:43:45.594656+05:30","type":"RESCUE_CLOSED","category":"close","category_label":"Closed","detail":"40/40 servings delivered. all servings placed.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null}]},{"seed_id":"seed_03_transport_escalation","label":"No lawful transport before the deadline","demonstrates":"","offer":{"servings":40,"food_type":"prepared_meal","vegetarian":true,"food_name":"Paneer curry, rice and rotis","start":"17:35","deadline":"19:00","window_min":85},"outcome":{"delivered":0,"offered":40,"interventions":1,"decision_points":7,"replans":5,"confirmations":2,"unresolved":2,"closed_reason":"no viable autonomous plan"},"events":[{"i":0,"at":"17:35","iso":"2026-09-14T17:35:00+05:30","type":"OFFER_RECEIVED","category":"fact","category_label":"Fact","detail":"40 servings, prepared_meal, deadline 19:00.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":1,"at":"17:36","iso":"2026-09-14T17:36:00+05:30","type":"SAFETY_CHECK","category":"policy","category_label":"Policy gate","detail":"PASS","policy_ref":"FSSAI Surplus Food Regs 2019","decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":2,"at":"17:37","iso":"2026-09-14T17:37:00+05:30","type":"CANDIDATES_GENERATED","category":"agent","category_label":"Agent action","detail":"7 candidates evaluated; 4 viable.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":3,"at":"17:38","iso":"2026-09-14T17:38:00+05:30","type":"CONFIRMATION_REQUESTED","category":"agent","category_label":"Agent action","detail":"recipient_002: asking about 'has_valid_licence_or_registration'.","policy_ref":null,"decision_point":false,"recipient_id":"recipient_002","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":4,"at":"17:48","iso":"2026-09-14T17:48:00+05:30","type":"CONFIRMATION_UNRESOLVED","category":"fact","category_label":"Fact","detail":"recipient_002: no reply on 'has_valid_licence_or_registration' within 10 min. Eliminated; not an escalation while other candidates remain.","policy_ref":null,"decision_point":false,"recipient_id":"recipient_002","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":5,"at":"17:49","iso":"2026-09-14T17:49:00+05:30","type":"CANDIDATES_GENERATED","category":"agent","category_label":"Agent action","detail":"6 candidates evaluated; 4 viable.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":6,"at":"17:49","iso":"2026-09-14T17:49:00+05:30","type":"REPLAN","category":"replan","category_label":"Replan","detail":"No plan from this cycle; regenerating candidates. 40 servings unplaced.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":7,"at":"17:50","iso":"2026-09-14T17:50:00+05:30","type":"CANDIDATES_GENERATED","category":"agent","category_label":"Agent action","detail":"6 candidates evaluated; 4 viable.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":8,"at":"17:51","iso":"2026-09-14T17:51:00+05:30","type":"CONFIRMATION_REQUESTED","category":"agent","category_label":"Agent action","detail":"recipient_005: asking about 'has_reheating_facilities'.","policy_ref":null,"decision_point":false,"recipient_id":"recipient_005","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":9,"at":"18:01","iso":"2026-09-14T18:01:00+05:30","type":"CONFIRMATION_UNRESOLVED","category":"fact","category_label":"Fact","detail":"recipient_005: no reply on 'has_reheating_facilities' within 10 min. Eliminated; not an escalation while other candidates remain.","policy_ref":null,"decision_point":false,"recipient_id":"recipient_005","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":10,"at":"18:02","iso":"2026-09-14T18:02:00+05:30","type":"CANDIDATES_GENERATED","category":"agent","category_label":"Agent action","detail":"5 candidates evaluated; 4 viable.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":11,"at":"18:02","iso":"2026-09-14T18:02:00+05:30","type":"REPLAN","category":"replan","category_label":"Replan","detail":"No plan from this cycle; regenerating candidates. 40 servings unplaced.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":12,"at":"18:03","iso":"2026-09-14T18:03:00+05:30","type":"CANDIDATES_GENERATED","category":"agent","category_label":"Agent action","detail":"5 candidates evaluated; 4 viable.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":13,"at":"18:04","iso":"2026-09-14T18:04:00+05:30","type":"OUTREACH_SENT","category":"agent","category_label":"Agent action","detail":"recipient_001: requesting 40 servings.","policy_ref":null,"decision_point":false,"recipient_id":"recipient_001","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":14,"at":"18:09","iso":"2026-09-14T18:09:00+05:30","type":"OUTREACH_ACCEPTED","category":"fact","category_label":"Fact","detail":"recipient_001: accepts 40 of 40 (capacity 60).","policy_ref":null,"decision_point":false,"recipient_id":"recipient_001","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":15,"at":"18:09","iso":"2026-09-14T18:09:00+05:30","type":"TRANSPORT_REJECTED","category":"policy","category_label":"Policy gate","detail":"driver_001: unavailable.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":"driver_001","options":null,"minutes_remaining":null,"unplaced":null},{"i":16,"at":"18:09","iso":"2026-09-14T18:09:00+05:30","type":"TRANSPORT_REJECTED","category":"policy","category_label":"Policy gate","detail":"driver_002: unavailable.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":"driver_002","options":null,"minutes_remaining":null,"unplaced":null},{"i":17,"at":"18:09","iso":"2026-09-14T18:09:00+05:30","type":"TRANSPORT_REJECTED","category":"policy","category_label":"Policy gate","detail":"driver_003: Perishable food requires temperature control; vehicle has neither active temperature control nor insulated containers or ice packs.","policy_ref":"FSSAI Surplus Food Regs 2019, Sch. I, 2(2)","decision_point":false,"recipient_id":null,"driver_id":"driver_003","options":null,"minutes_remaining":null,"unplaced":null},{"i":18,"at":"18:09","iso":"2026-09-14T18:09:00+05:30","type":"TRANSPORT_REJECTED","category":"policy","category_label":"Policy gate","detail":"driver_004: Vehicle is not clean and sanitised.","policy_ref":"FSSAI Surplus Food Regs 2019, Sch. I, 2(2)","decision_point":false,"recipient_id":null,"driver_id":"driver_004","options":null,"minutes_remaining":null,"unplaced":null},{"i":19,"at":"18:09","iso":"2026-09-14T18:09:00+05:30","type":"CANDIDATE_ELIMINATED","category":"policy","category_label":"Policy gate","detail":"recipient_001: no lawful transport available.","policy_ref":"FSSAI Surplus Food Regs 2019, Sch. I, 2(2)","decision_point":false,"recipient_id":"recipient_001","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":20,"at":"18:10","iso":"2026-09-14T18:10:00+05:30","type":"CANDIDATES_GENERATED","category":"agent","category_label":"Agent action","detail":"4 candidates evaluated; 3 viable.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":21,"at":"18:10","iso":"2026-09-14T18:10:00+05:30","type":"REPLAN","category":"replan","category_label":"Replan","detail":"No plan from this cycle; regenerating candidates. 40 servings unplaced.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":22,"at":"18:11","iso":"2026-09-14T18:11:00+05:30","type":"CANDIDATES_GENERATED","category":"agent","category_label":"Agent action","detail":"4 candidates evaluated; 3 viable.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":23,"at":"18:12","iso":"2026-09-14T18:12:00+05:30","type":"OUTREACH_SENT","category":"agent","category_label":"Agent action","detail":"recipient_004: requesting 40 servings.","policy_ref":null,"decision_point":false,"recipient_id":"recipient_004","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":24,"at":"18:27","iso":"2026-09-14T18:27:00+05:30","type":"OUTREACH_TIMEOUT","category":"fact","category_label":"Fact","detail":"recipient_004: no reply within 15 min.","policy_ref":null,"decision_point":false,"recipient_id":"recipient_004","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":25,"at":"18:28","iso":"2026-09-14T18:28:00+05:30","type":"CANDIDATES_GENERATED","category":"agent","category_label":"Agent action","detail":"3 candidates evaluated; 2 viable.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":26,"at":"18:28","iso":"2026-09-14T18:28:00+05:30","type":"REPLAN","category":"replan","category_label":"Replan","detail":"No plan from this cycle; regenerating candidates. 40 servings unplaced.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":27,"at":"18:29","iso":"2026-09-14T18:29:00+05:30","type":"CANDIDATES_GENERATED","category":"agent","category_label":"Agent action","detail":"3 candidates evaluated; 2 viable.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":28,"at":"18:30","iso":"2026-09-14T18:30:00+05:30","type":"OUTREACH_SENT","category":"agent","category_label":"Agent action","detail":"recipient_006: requesting 40 servings.","policy_ref":null,"decision_point":false,"recipient_id":"recipient_006","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":29,"at":"18:36","iso":"2026-09-14T18:36:00+05:30","type":"OUTREACH_ACCEPTED","category":"fact","category_label":"Fact","detail":"recipient_006: accepts 30 of 40 (capacity 30).","policy_ref":null,"decision_point":false,"recipient_id":"recipient_006","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":30,"at":"18:36","iso":"2026-09-14T18:36:00+05:30","type":"CANDIDATE_ELIMINATED","category":"policy","category_label":"Policy gate","detail":"recipient_006: no lawful transport available.","policy_ref":"FSSAI Surplus Food Regs 2019, Sch. I, 2(2)","decision_point":false,"recipient_id":"recipient_006","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":31,"at":"18:37","iso":"2026-09-14T18:37:00+05:30","type":"CANDIDATES_GENERATED","category":"agent","category_label":"Agent action","detail":"2 candidates evaluated; 1 viable.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":32,"at":"18:37","iso":"2026-09-14T18:37:00+05:30","type":"REPLAN","category":"replan","category_label":"Replan","detail":"No plan from this cycle; regenerating candidates. 40 servings unplaced.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":33,"at":"18:38","iso":"2026-09-14T18:38:00+05:30","type":"CANDIDATES_GENERATED","category":"agent","category_label":"Agent action","detail":"2 candidates evaluated; 1 viable.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":34,"at":"18:39","iso":"2026-09-14T18:39:00+05:30","type":"OUTREACH_SENT","category":"agent","category_label":"Agent action","detail":"recipient_003: requesting 40 servings.","policy_ref":null,"decision_point":false,"recipient_id":"recipient_003","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":35,"at":"18:47","iso":"2026-09-14T18:47:00+05:30","type":"OUTREACH_ACCEPTED","category":"fact","category_label":"Fact","detail":"recipient_003: accepts 25 of 40 (capacity 25).","policy_ref":null,"decision_point":false,"recipient_id":"recipient_003","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":36,"at":"18:47","iso":"2026-09-14T18:47:00+05:30","type":"CANDIDATE_ELIMINATED","category":"policy","category_label":"Policy gate","detail":"recipient_003: no lawful transport available.","policy_ref":"FSSAI Surplus Food Regs 2019, Sch. I, 2(2)","decision_point":false,"recipient_id":"recipient_003","driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":37,"at":"18:48","iso":"2026-09-14T18:48:00+05:30","type":"CANDIDATES_GENERATED","category":"agent","category_label":"Agent action","detail":"1 candidates evaluated; 0 viable.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null},{"i":38,"at":"18:48","iso":"2026-09-14T18:48:00+05:30","type":"HUMAN_INTERVENTION","category":"human","category_label":"Human decision","detail":"No available vehicle satisfies transport conditions for perishable food before the consumption deadline. | 12 min to deadline | 40 servings unplaced | options: Source an insulated container to pair with a sanitised vehicle; Authorise a nearer recipient reachable by an available vehicle; Stand down and direct the donor to Sch. I 2(4) disposal handling","policy_ref":"FSSAI Surplus Food Regs 2019, Sch. I, 2(2)","decision_point":true,"recipient_id":null,"driver_id":null,"options":["Source an insulated container to pair with a sanitised vehicle","Authorise a nearer recipient reachable by an available vehicle","Stand down and direct the donor to Sch. I 2(4) disposal handling"],"minutes_remaining":12,"unplaced":40},{"i":39,"at":"18:48","iso":"2026-09-14T18:48:00+05:30","type":"RESCUE_CLOSED","category":"close","category_label":"Closed","detail":"0/40 servings delivered. no viable autonomous plan.","policy_ref":null,"decision_point":false,"recipient_id":null,"driver_id":null,"options":null,"minutes_remaining":null,"unplaced":null}]}],"metrics":{"scenarios":3,"completed_without_human":2,"interventions":1,"decision_points":15,"replans":10,"servings_delivered":80,"servings_offered":120}};
+
+const $ = s => document.querySelector(s);
+const el = (t, c) => { const n = document.createElement(t); if (c) n.className = c; return n; };
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+let active = 0, timer = null, expanded = null;
+
+function mins(hhmm){ const [h,m] = hhmm.split(':').map(Number); return h*60+m; }
+function fmt(m){ if (m < 0) m = 0; return `${Math.floor(m/60)}:${String(m%60).padStart(2,'0')}`; }
+
+/* ---- scenario switcher ---- */
+DATA.runs.forEach((r, i) => {
+  const b = el('button');
+  b.textContent = r.label;
+  b.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
+  b.onclick = () => select(i);
+  $('#switch').appendChild(b);
+});
+
+function select(i){
+  active = i; expanded = null;
+  [...$('#switch').children].forEach((b, j) =>
+    b.setAttribute('aria-pressed', j === i ? 'true' : 'false'));
+  render();
+}
+
+/* ---- static panels ---- */
+function renderFacts(run){
+  const o = run.offer, d = run.outcome;
+  const rows = [
+    ['Food', o.food_name],
+    ['Quantity', `${o.servings} servings`],
+    ['Safe until', o.deadline],
+    ['Window', `${Math.floor(o.window_min/60)}h ${o.window_min%60}m`],
+    ['Delivered', `${d.delivered}/${d.offered}`],
+    ['Replans', d.replans],
+  ];
+  $('#facts').innerHTML = rows.map(([k,v]) =>
+    `<dt>${k}</dt><dd>${v}</dd>`).join('');
+}
+
+function renderMetrics(){
+  const m = DATA.metrics;
+  $('#metrics').innerHTML =
+    `<div class="metric"><span>Ran without a person</span><b>${m.completed_without_human} of ${m.scenarios}</b></div>` +
+    `<div class="metric"><span>Handed to a person</span><b>${m.interventions} of ${m.decision_points}</b></div>` +
+    `<div class="metric"><span>Servings delivered</span><b>${m.servings_delivered} of ${m.servings_offered}</b></div>` +
+    `<div class="metric"><span>Plans rebuilt</span><b>${m.replans}</b></div>` +
+    `<p class="footnote">Three hand-built scenarios. Too few for a percentage, so these stay as counts.</p>`;
+}
+
+/* ---- countdown ---- */
+function tick(run, at){
+  const left = mins(run.offer.deadline) - mins(at);
+  const total = run.offer.window_min;
+  $('#cd').textContent = fmt(left);
+  $('#cdbar').style.width = Math.max(0, Math.min(100, left/total*100)) + '%';
+  $('#clock').classList.toggle('expired', left <= 0);
+  $('#cdcap').textContent = left <= 0
+    ? 'the serving window has closed'
+    : 'until the food is no longer fit to serve';
+}
+
+/* ---- event rows ---- */
+function subject(e){
+  return e.recipient_id || e.driver_id || '';
+}
+
+function row(e, run){
+  const li = el('li', 'cat-' + e.category);
+  li.tabIndex = 0;
+  li.setAttribute('aria-expanded', 'false');
+
+  const t = el('div','t'); t.textContent = e.at;
+  const g = el('div','gcell');
+  const i = el('i','g g-' + e.category);
+  if (e.category === 'replan') i.textContent = '↺';
+  g.appendChild(i);
+
+  const txt = el('div','txt');
+  const who = subject(e);
+  txt.innerHTML = (who ? `<span class="who">${who}</span> ` : '') +
+                  `<span class="what">${escape_(e.detail)}</span>`;
+
+  li.append(t, g, txt);
+
+  const open = () => {
+    if (expanded === e.i){ li.querySelector('.why')?.remove();
+      li.setAttribute('aria-expanded','false'); expanded = null; return; }
+    document.querySelectorAll('.why').forEach(n => n.remove());
+    document.querySelectorAll('ol.events li').forEach(n => n.setAttribute('aria-expanded','false'));
+    li.appendChild(why(e));
+    li.setAttribute('aria-expanded','true');
+    expanded = e.i;
+  };
+  li.onclick = ev => { if (ev.target.tagName !== 'BUTTON') open(); };
+  li.onkeydown = ev => { if (ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); open(); } };
+
+  if (e.category === 'human') li.appendChild(escalation(e, run));
+  return li;
+}
+
+function why(e){
+  const d = el('dl','why');
+  const add = (k,v) => { if (!v && v !== false) return;
+    const dt = el('dt'); dt.textContent = k;
+    const dd = el('dd'); dd.textContent = v; d.append(dt, dd); };
+  add('Event', e.type);
+  add('Kind', e.category_label);
+  add('Scenario time', e.at);
+  add('Rule applied', e.policy_ref);
+  add('Decision boundary', e.decision_point ? 'yes — a person was asked' : 'no — resolved by the agent');
+  return d;
+}
+
+function escalation(e, run){
+  const box = el('div','esc');
+  const h = el('h3'); h.textContent = 'A person needs to decide';
+  const lede = el('p','lede');
+  lede.textContent = `${e.unplaced} servings are still unplaced and the food stops being fit to serve at ${run.offer.deadline}.`;
+  const opts = el('div','opts');
+  (e.options || []).forEach(o => { const b = el('button'); b.textContent = o; opts.appendChild(b); });
+
+  const reason = el('div','reason');
+  const rep = run.outcome.replans, dp = run.outcome.decision_points;
+  reason.innerHTML =
+    `<p>Why the agent stopped</p>` +
+    `<p><strong>${rep} plans</strong> were built and discarded across <strong>${dp} decision points</strong>.</p>` +
+    `<p>Every remaining option failed a mandatory rule, so no lawful plan is left to try.</p>`;
+  box.append(h, lede, opts, reason);
+  return box;
+}
+
+function escape_(s){ const d = el('div'); d.textContent = s; return d.innerHTML; }
+
+/* ---- playback ---- */
+function render(){
+  clearTimeout(timer);
+  const run = DATA.runs[active];
+  $('#run-title').textContent = run.label;
+  $('#run-sub').textContent = `${run.offer.servings} servings from ${run.offer.start}, safe until ${run.offer.deadline}`;
+  renderFacts(run); renderMetrics();
+  $('#events').innerHTML = '';
+  tick(run, run.offer.start);
+
+  if (reduced){ run.events.forEach(e => $('#events').appendChild(row(e, run)));
+    tick(run, run.events[run.events.length-1].at); return; }
+
+  let k = 0;
+  const step = () => {
+    if (k >= run.events.length) return;
+    const e = run.events[k];
+    const li = row(e, run);
+    $('#events').appendChild(li);
+    tick(run, e.at);
+    const next = run.events[k+1];
+    const gap = next ? Math.max(0, mins(next.at) - mins(e.at)) : 0;
+    k++;
+    timer = setTimeout(step, Math.min(1100, Math.max(130, gap * 1000/60)));
+  };
+  step();
+}
+
+$('#replay').onclick = render;
+select(0);
+</script>
+</body>
+</html>

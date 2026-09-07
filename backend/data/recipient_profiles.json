@@ -1,0 +1,251 @@
+{
+  "_README": {
+    "purpose": "The recipient set the agent actually reasons over. Anonymous IDs only.",
+    "status": "SIMULATED. Every capability value in this file is a modelling choice, not a claim about any real organisation.",
+    "archetype_link": "Each profile names an archetype justified in organizations.json. The link is to an archetype, never to a specific named organisation.",
+    "tristate": "Capability fields are true | false | \"unknown\". 'unknown' is NOT a silent true. registry.py converts unknown into a required confirmation step, so the agent must resolve it before committing a plan.",
+    "coordinates": "Approximate points within Kolkata, used for travel-time arithmetic only. They are not the addresses of any real organisation.",
+    "reg_5_2_transport_note": "reg. 5(2) requires the distribution organisation to have facilities for transport, storage and reheating. 'Transport facilities' here means the organisation can receive a lawful delivery - either in-house or via transport arranged for the leg. The vehicle itself is checked separately against Sch. I 2(2) by evaluate_transport, so the two are not double-counted."
+  },
+  "profiles": [
+    {
+      "recipient_id": "recipient_001",
+      "archetype": "kitchen_based_meal_provider",
+      "location": {
+        "lat": 22.5726,
+        "lng": 88.3639,
+        "area_label": "Central Kolkata"
+      },
+      "published_hours": {
+        "open": "09:00",
+        "close": "20:00"
+      },
+      "accepted_food_types": [
+        "prepared_meal",
+        "pre_packed"
+      ],
+      "nominal_capacity_servings": 60,
+      "capabilities": {
+        "licensed_or_registered": true,
+        "transport_facilities": true,
+        "storage_facilities": true,
+        "reheating_facilities": true,
+        "refrigerator_temp_c": 4.5,
+        "refrigerator_cleaned_within_7_days": true
+      }
+    },
+    {
+      "recipient_id": "recipient_002",
+      "archetype": "volunteer_redistribution_network",
+      "location": {
+        "lat": 22.5674,
+        "lng": 88.3708,
+        "area_label": "Sealdah corridor"
+      },
+      "published_hours": {
+        "open": "17:00",
+        "close": "22:00"
+      },
+      "accepted_food_types": [
+        "prepared_meal"
+      ],
+      "nominal_capacity_servings": 80,
+      "capabilities": {
+        "licensed_or_registered": "unknown",
+        "transport_facilities": true,
+        "storage_facilities": false,
+        "reheating_facilities": false,
+        "refrigerator_temp_c": null,
+        "refrigerator_cleaned_within_7_days": false
+      },
+      "modelling_note": "Immediate-handoff volunteer model: no cold chain, no reheating. Fails reg. 5(2) facilities and the Sch. I 2(6) refrigeration gate for perishable food. Included deliberately so the agent must eliminate a high-capacity, well-placed candidate for a lawful reason."
+    },
+    {
+      "recipient_id": "recipient_003",
+      "archetype": "shelter_with_storage",
+      "location": {
+        "lat": 22.5448,
+        "lng": 88.3426,
+        "area_label": "South Kolkata"
+      },
+      "published_hours": {
+        "open": "08:00",
+        "close": "18:00"
+      },
+      "accepted_food_types": [
+        "prepared_meal",
+        "pre_packed"
+      ],
+      "nominal_capacity_servings": 25,
+      "capabilities": {
+        "licensed_or_registered": true,
+        "transport_facilities": true,
+        "storage_facilities": true,
+        "reheating_facilities": true,
+        "refrigerator_temp_c": 5.5,
+        "refrigerator_cleaned_within_7_days": true
+      }
+    },
+    {
+      "recipient_id": "recipient_004",
+      "archetype": "kitchen_based_meal_provider",
+      "location": {
+        "lat": 22.6203,
+        "lng": 88.4029,
+        "area_label": "North-east Kolkata"
+      },
+      "published_hours": {
+        "open": "10:00",
+        "close": "16:00"
+      },
+      "accepted_food_types": [
+        "prepared_meal"
+      ],
+      "nominal_capacity_servings": 45,
+      "capabilities": {
+        "licensed_or_registered": true,
+        "transport_facilities": true,
+        "storage_facilities": true,
+        "reheating_facilities": true,
+        "refrigerator_temp_c": 6.2,
+        "refrigerator_cleaned_within_7_days": true
+      },
+      "modelling_note": "Fridge at 6.2 C passes the below-7 C requirement but with little headroom. Distance and early closing make it a plausible-but-marginal candidate."
+    },
+    {
+      "recipient_id": "recipient_005",
+      "archetype": "shelter_with_storage",
+      "location": {
+        "lat": 22.585,
+        "lng": 88.33,
+        "area_label": "North-west Kolkata"
+      },
+      "published_hours": {
+        "open": "07:00",
+        "close": "21:00"
+      },
+      "accepted_food_types": [
+        "prepared_meal",
+        "pre_packed"
+      ],
+      "nominal_capacity_servings": 40,
+      "capabilities": {
+        "licensed_or_registered": true,
+        "transport_facilities": true,
+        "storage_facilities": true,
+        "reheating_facilities": "unknown",
+        "refrigerator_temp_c": 3.8,
+        "refrigerator_cleaned_within_7_days": true
+      },
+      "modelling_note": "Reheating capability unknown. Forces the agent to seek confirmation rather than assume, which is the behaviour the unknown state exists to produce."
+    },
+    {
+      "recipient_id": "recipient_006",
+      "archetype": "kitchen_based_meal_provider",
+      "location": {
+        "lat": 22.498,
+        "lng": 88.3712,
+        "area_label": "Southern fringe"
+      },
+      "published_hours": {
+        "open": "09:00",
+        "close": "19:00"
+      },
+      "accepted_food_types": [
+        "prepared_meal",
+        "pre_packed"
+      ],
+      "nominal_capacity_servings": 30,
+      "capabilities": {
+        "licensed_or_registered": true,
+        "transport_facilities": true,
+        "storage_facilities": true,
+        "reheating_facilities": true,
+        "refrigerator_temp_c": 5.0,
+        "refrigerator_cleaned_within_7_days": true
+      }
+    },
+    {
+      "recipient_id": "recipient_007",
+      "archetype": "volunteer_redistribution_network",
+      "location": {
+        "lat": 22.551,
+        "lng": 88.398,
+        "area_label": "East Kolkata"
+      },
+      "published_hours": {
+        "open": "18:00",
+        "close": "23:00"
+      },
+      "accepted_food_types": [
+        "prepared_meal"
+      ],
+      "nominal_capacity_servings": 50,
+      "capabilities": {
+        "licensed_or_registered": false,
+        "transport_facilities": true,
+        "storage_facilities": false,
+        "reheating_facilities": false,
+        "refrigerator_temp_c": null,
+        "refrigerator_cleaned_within_7_days": false
+      },
+      "modelling_note": "Explicitly unregistered. Eliminated at the licence gate under reg. 5(1) before any ranking happens."
+    }
+  ],
+  "drivers": [
+    {
+      "driver_id": "driver_001",
+      "base": {
+        "lat": 22.57,
+        "lng": 88.36
+      },
+      "vehicle": {
+        "clean_and_sanitised": true,
+        "can_hold_optimum_temperature": false,
+        "has_insulated_container_or_ice_packs": true,
+        "food_grade_contact_surfaces": true
+      }
+    },
+    {
+      "driver_id": "driver_002",
+      "base": {
+        "lat": 22.53,
+        "lng": 88.35
+      },
+      "vehicle": {
+        "clean_and_sanitised": true,
+        "can_hold_optimum_temperature": true,
+        "has_insulated_container_or_ice_packs": true,
+        "food_grade_contact_surfaces": true
+      }
+    },
+    {
+      "driver_id": "driver_003",
+      "base": {
+        "lat": 22.61,
+        "lng": 88.39
+      },
+      "vehicle": {
+        "clean_and_sanitised": true,
+        "can_hold_optimum_temperature": false,
+        "has_insulated_container_or_ice_packs": false,
+        "food_grade_contact_surfaces": true
+      },
+      "modelling_note": "No temperature control of any kind. Fails Sch. I 2(2) for perishable loads while remaining valid for non-perishable ones."
+    },
+    {
+      "driver_id": "driver_004",
+      "base": {
+        "lat": 22.59,
+        "lng": 88.34
+      },
+      "vehicle": {
+        "clean_and_sanitised": false,
+        "can_hold_optimum_temperature": true,
+        "has_insulated_container_or_ice_packs": true,
+        "food_grade_contact_surfaces": true
+      },
+      "modelling_note": "Refrigerated but not sanitised. Fails regardless of load type."
+    }
+  ]
+}
