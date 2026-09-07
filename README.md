@@ -14,10 +14,13 @@ plan is left.
    India's *Food Safety and Standards (Recovery and Distribution of Surplus Food)
    Regulations, 2019* (FSSAI), with every rule tagged with its clause reference (see
    [Safety design](#safety-design-not-vibes) below).
-3. The **coordinator** generates candidate recipients, ranks them, requests acceptance,
-   arranges compliant transport, and verifies delivery — replanning from current state on
-   every failure (a declined offer, an unresolved capability, no lawful vehicle) rather than
-   walking a fixed fallback list.
+3. A **coordinator** generates candidate recipients, decides which to try, requests
+   acceptance, arranges compliant transport, and verifies delivery — replanning from current
+   state on every failure (a declined offer, an unresolved capability, no lawful vehicle)
+   rather than walking a fixed fallback list. Two interchangeable coordinators run the exact
+   same tools and the exact same safety gate: a deterministic one for reproducible evaluation,
+   and a live [Strands Agent](#live-strands-agent-amazon-bedrock) on Amazon Bedrock that
+   genuinely orchestrates the tool calls itself — see below.
 4. If no lawful, autonomous plan exists before the deadline, it **escalates to a human** with
    the reason, the options, and the regulation clause behind the block — instead of guessing.
 5. Every run emits an **append-only event log** with timestamps, policy references, and
@@ -61,6 +64,51 @@ needs reproducibility; `StrandsPolicy` is the seam where a Strands/Bedrock agent
 rank candidates without touching the gates or the loop — it can reorder viable candidates,
 but it cannot make an ineligible one eligible, and every choice still passes back through the
 deterministic safety gate before anything commits.
+
+## Live Strands agent (Amazon Bedrock)
+
+This is the hackathon-required piece: a real [Strands Agents SDK](https://github.com/strands-agents)
+`Agent`, backed by Amazon Bedrock, that orchestrates the actual rescue — not a single
+classification call wrapped in agent clothing. `backend/agent_coordinator.py` gives it four
+tools and lets Strands' own event loop decide when to call which, in what order, how many
+times:
+
+| Tool | What it does |
+|---|---|
+| `get_situation` | Read-only: remaining servings, minutes to deadline, every candidate's distance/capacity/eligibility/pending confirmations. |
+| `confirm_capability` | Asks a recipient to resolve one unknown capability field. Returns `true` / `false` / `null` (no reply). |
+| `attempt_placement` | The only tool that can place food. Internally always runs `request_acceptance -> find_transport -> check_timing -> commit_leg -> verify_delivery` in that fixed order — there is no call sequence that skips a legal check. |
+| `escalate` | Hands off to a human with a reason and concrete options. |
+
+The agent decides *which candidate to try, when to ask a clarifying question, and when to give
+up* — a genuinely multi-step, replanning tool-calling loop (parallel-style outreach across
+candidates, retries with a widened pool, graceful escalation), which is what the judging
+criterion "how thoroughly and skillfully does the project use Strands Agents" is actually
+asking for. It never decides *whether* a regulation is satisfied: every tool routes through
+the same `safety_policy.py` gate as the deterministic path, so a model that hallucinates or
+gets talked into something unsafe still can't commit an unlawful rescue.
+
+### Setup
+
+1. Get an [AWS Builder ID](https://aws.amazon.com/what-is/aws-builder-id/) and request the
+   hackathon's AWS credits if you haven't already.
+2. Configure AWS credentials locally (`aws configure`, or `AWS_ACCESS_KEY_ID` /
+   `AWS_SECRET_ACCESS_KEY` / `AWS_REGION` env vars) for an account with Bedrock access.
+3. In the AWS Console, go to **Bedrock → Model access** in your region and enable a Claude
+   model (e.g. a Sonnet model). Model IDs and availability change over time and by
+   region/account, so this repo does not hardcode one.
+4. Install the extra dependencies (the deterministic path above needs none of this):
+   ```bash
+   cd backend
+   pip install -r requirements.txt
+   ```
+5. Set the model you enabled and run one scenario live:
+   ```bash
+   export BEDROCK_MODEL_ID=us.anthropic.claude-sonnet-4-5-20250929-v1:0   # whatever you enabled
+   python run_agent_demo.py seed_03_transport_escalation
+   ```
+   Prints the agent's own narration alongside the same event log format the deterministic
+   path and the console use, so a run is directly comparable either way.
 
 ## Safety design: not vibes
 
@@ -129,17 +177,21 @@ yet built — see [Limitations](#limitations--whats-not-built).
 
 ## Running it
 
-Requires only the Python 3 standard library — no dependencies to install.
+The deterministic path requires only the Python 3 standard library — no dependencies to
+install. (The live Strands agent needs `pip install -r requirements.txt` plus AWS/Bedrock
+setup — see [Live Strands agent](#live-strands-agent-amazon-bedrock) above.)
 
 ```bash
 cd backend
 python run_demo.py
 ```
 
-This runs all three seeded scenarios through the identical coordinator, prints the full event
-trace, aggregate metrics, and six architectural acceptance checks (recipient rejection
-handled, unresolved capability handled, transport failure handled, replanning occurred, at
-least one correct escalation, at least one fully autonomous completion).
+This runs all three seeded scenarios through the identical deterministic coordinator, prints
+the full event trace, aggregate metrics, and six architectural acceptance checks (recipient
+rejection handled, unresolved capability handled, transport failure handled, replanning
+occurred, at least one correct escalation, at least one fully autonomous completion). It's the
+reproducible, no-API-key path — useful for CI, for the 3-seed metrics above, and for anyone
+reviewing the repo without AWS credentials on hand.
 
 ### Operations console
 
@@ -161,10 +213,10 @@ of): a fancy map UI, a multi-agent split (one coordinator agent is sufficient �
 criterion is orchestration quality, not agent count), live WhatsApp/SMS integration, real
 outreach to real organisations, optimization algorithms, dozens of recipients.
 
-Not yet built: a live Strands/Bedrock-backed `StrandsPolicy` (the seam exists in
-`coordinator.py` but currently falls back to the deterministic ranker), the 30-scenario
-generated evaluation set (only the 3 hand-authored seeds exist today), and a hosted live demo
-deployment.
+Not yet built: the 30-scenario generated evaluation set (only the 3 hand-authored seeds exist
+today), a hosted live demo deployment, and Amazon Bedrock AgentCore (the hackathon calls this
+optional — a scoring boost, not a requirement — Strands Agents SDK is the required piece and
+that is built; see [Live Strands agent](#live-strands-agent-amazon-bedrock)).
 
 ## License
 

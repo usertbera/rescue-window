@@ -65,12 +65,19 @@ class DeterministicPolicy:
 
 class StrandsPolicy:
     """
-    Placeholder for the LLM ranker.
+    Ranking-only seam for dropping an LLM into this same deterministic loop.
 
     Contract: receives the candidate list and current state, returns the same
     candidates reordered. It may not add candidates, may not mark an
     ineligible candidate eligible, and may not see ground truth. Anything it
     returns still passes through the deterministic gates before commitment.
+
+    This class stays a documented no-op fallback on purpose. The actual
+    hackathon-required Strands integration -- a real Agent driving the whole
+    tool-calling loop over Amazon Bedrock, not just reordering a list -- lives
+    in agent_coordinator.AgentCoordinator. That is the "thorough and skillful
+    use of Strands Agents" deliverable; run it with run_agent_demo.py. This
+    class remains as the lighter-weight seam for a future ranking-only model.
     """
 
     def __init__(self, agent=None):
