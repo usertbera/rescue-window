@@ -1,0 +1,2828 @@
+{
+  "_README": {
+    "purpose": "30 scripted scenarios for the human-intervention evaluation, distinct from the 3 hand-authored narrative seeds in scenario_seeds.json.",
+    "hard_rule": "Anonymous recipient_/driver_ IDs only, same as scenario_seeds.json.",
+    "generation": "Produced by generate_evaluation_scenarios.py from a fixed base seed (20260914). Deterministic: re-running the generator reproduces this file byte-for-byte. Varies quantity, deadline pressure, perishability, recipient response patterns, driver availability, and unresolved-capability outcomes. Every offer clears the safety gate by construction -- this set evaluates the coordination loop, not the safety module.",
+    "usage": "python run_evaluation.py"
+  },
+  "seeds": {
+    "generated_001": {
+      "label": "Generated evaluation scenario 001",
+      "scenario_start": "2026-09-14T17:28:00+05:30",
+      "offer": {
+        "offer_id": "gen_offer_001",
+        "donor_id": "donor_corporate_canteen_001",
+        "donor_has_valid_licence": true,
+        "food_type": "prepared_meal",
+        "quantity_servings": 17,
+        "perishable": true,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T20:53:00+05:30",
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": false,
+        "donor_location": {
+          "lat": 22.5821,
+          "lng": 88.3465
+        },
+        "label": {
+          "food_name": "Dal, rice, and mixed sabzi",
+          "source": "Corporate Canteen",
+          "preparation_date": "2026-09-14T16:01:00+05:30",
+          "last_consumption_date": "2026-09-14T20:53:00+05:30",
+          "vegetarian": true,
+          "masked": false
+        }
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 35,
+          "response": "decline",
+          "response_delay_min": 1
+        },
+        "recipient_002": {
+          "capacity_servings": 34,
+          "response": "accept",
+          "response_delay_min": 4
+        },
+        "recipient_003": {
+          "capacity_servings": 16,
+          "response": "accept",
+          "response_delay_min": 5
+        },
+        "recipient_004": {
+          "capacity_servings": 73,
+          "response": "decline",
+          "response_delay_min": 11
+        },
+        "recipient_005": {
+          "capacity_servings": 77,
+          "response": "decline",
+          "response_delay_min": 2
+        },
+        "recipient_006": {
+          "capacity_servings": 41,
+          "response": "accept",
+          "response_delay_min": 6
+        },
+        "recipient_007": {
+          "capacity_servings": 32,
+          "response": "accept",
+          "response_delay_min": 5
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": true,
+          "ready_in_min": 9
+        },
+        "driver_002": {
+          "available": true,
+          "ready_in_min": 9
+        },
+        "driver_003": {
+          "available": true,
+          "ready_in_min": 0
+        },
+        "driver_004": {
+          "available": false,
+          "ready_in_min": null
+        }
+      },
+      "capability_replies": {
+        "recipient_002": {
+          "has_valid_licence_or_registration": true
+        }
+      },
+      "expected_outcome": {
+        "note": "generated scenario; no hand-verified expectation, evaluated in aggregate only (see run_evaluation.py)"
+      }
+    },
+    "generated_002": {
+      "label": "Generated evaluation scenario 002",
+      "scenario_start": "2026-09-14T17:39:00+05:30",
+      "offer": {
+        "offer_id": "gen_offer_002",
+        "donor_id": "donor_wedding_hall_002",
+        "donor_has_valid_licence": true,
+        "food_type": "pre_packed",
+        "quantity_servings": 28,
+        "perishable": false,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T22:23:00+05:30",
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": true,
+        "donor_location": {
+          "lat": 22.5393,
+          "lng": 88.3781
+        },
+        "label": {
+          "item_name": "Mixed vegetable biryani and raita",
+          "manufacturer_info": "Wedding Hall",
+          "ingredients": [
+            "mixed ingredients \u2014 see original packaging"
+          ],
+          "expiry_date": "2026-09-14T22:23:00+05:30",
+          "masked": false
+        }
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 79,
+          "response": "decline",
+          "response_delay_min": 12
+        },
+        "recipient_002": {
+          "capacity_servings": 83,
+          "response": "accept",
+          "response_delay_min": 4
+        },
+        "recipient_003": {
+          "capacity_servings": 70,
+          "response": "accept",
+          "response_delay_min": 5
+        },
+        "recipient_004": {
+          "capacity_servings": 73,
+          "response": "accept",
+          "response_delay_min": 13
+        },
+        "recipient_005": {
+          "capacity_servings": 68,
+          "response": "accept",
+          "response_delay_min": 9
+        },
+        "recipient_006": {
+          "capacity_servings": 31,
+          "response": "decline",
+          "response_delay_min": 12
+        },
+        "recipient_007": {
+          "capacity_servings": 38,
+          "response": "accept",
+          "response_delay_min": 14
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": true,
+          "ready_in_min": 9
+        },
+        "driver_002": {
+          "available": true,
+          "ready_in_min": 15
+        },
+        "driver_003": {
+          "available": true,
+          "ready_in_min": 2
+        },
+        "driver_004": {
+          "available": false,
+          "ready_in_min": null
+        }
+      },
+      "capability_replies": {
+        "recipient_002": {
+          "has_valid_licence_or_registration": false
+        }
+      },
+      "expected_outcome": {
+        "note": "generated scenario; no hand-verified expectation, evaluated in aggregate only (see run_evaluation.py)"
+      }
+    },
+    "generated_003": {
+      "label": "Generated evaluation scenario 003",
+      "scenario_start": "2026-09-14T17:15:00+05:30",
+      "offer": {
+        "offer_id": "gen_offer_003",
+        "donor_id": "donor_grocery_store_003",
+        "donor_has_valid_licence": true,
+        "food_type": "pre_packed",
+        "quantity_servings": 15,
+        "perishable": true,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T20:15:00+05:30",
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": true,
+        "donor_location": {
+          "lat": 22.5498,
+          "lng": 88.3564
+        },
+        "label": {
+          "item_name": "Packaged bread and dairy overstock",
+          "manufacturer_info": "Grocery Store",
+          "ingredients": [
+            "mixed ingredients \u2014 see original packaging"
+          ],
+          "expiry_date": "2026-09-14T20:15:00+05:30",
+          "masked": false
+        }
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 81,
+          "response": "accept",
+          "response_delay_min": 4
+        },
+        "recipient_002": {
+          "capacity_servings": 76,
+          "response": "accept",
+          "response_delay_min": 11
+        },
+        "recipient_003": {
+          "capacity_servings": 17,
+          "response": "decline",
+          "response_delay_min": 6
+        },
+        "recipient_004": {
+          "capacity_servings": 20,
+          "response": "decline",
+          "response_delay_min": 3
+        },
+        "recipient_005": {
+          "capacity_servings": 30,
+          "response": "decline",
+          "response_delay_min": 5
+        },
+        "recipient_006": {
+          "capacity_servings": 18,
+          "response": "decline",
+          "response_delay_min": 8
+        },
+        "recipient_007": {
+          "capacity_servings": 78,
+          "response": "decline",
+          "response_delay_min": 10
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": true,
+          "ready_in_min": 11
+        },
+        "driver_002": {
+          "available": true,
+          "ready_in_min": 6
+        },
+        "driver_003": {
+          "available": true,
+          "ready_in_min": 6
+        },
+        "driver_004": {
+          "available": true,
+          "ready_in_min": 7
+        }
+      },
+      "capability_replies": {
+        "recipient_002": {
+          "has_valid_licence_or_registration": true
+        },
+        "recipient_005": {
+          "has_reheating_facilities": false
+        }
+      },
+      "expected_outcome": {
+        "note": "generated scenario; no hand-verified expectation, evaluated in aggregate only (see run_evaluation.py)"
+      }
+    },
+    "generated_004": {
+      "label": "Generated evaluation scenario 004",
+      "scenario_start": "2026-09-14T14:37:00+05:30",
+      "offer": {
+        "offer_id": "gen_offer_004",
+        "donor_id": "donor_grocery_store_004",
+        "donor_has_valid_licence": true,
+        "food_type": "prepared_meal",
+        "quantity_servings": 60,
+        "perishable": false,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T18:27:00+05:30",
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": true,
+        "donor_location": {
+          "lat": 22.5703,
+          "lng": 88.373
+        },
+        "label": {
+          "food_name": "Packaged bread and dairy overstock",
+          "source": "Grocery Store",
+          "preparation_date": "2026-09-14T13:22:00+05:30",
+          "last_consumption_date": "2026-09-14T18:27:00+05:30",
+          "vegetarian": true,
+          "masked": false
+        }
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 29,
+          "response": "decline",
+          "response_delay_min": 9
+        },
+        "recipient_002": {
+          "capacity_servings": 30,
+          "response": "accept",
+          "response_delay_min": 2
+        },
+        "recipient_003": {
+          "capacity_servings": 20,
+          "response": "accept",
+          "response_delay_min": 6
+        },
+        "recipient_004": {
+          "capacity_servings": 52,
+          "response": "decline",
+          "response_delay_min": 4
+        },
+        "recipient_005": {
+          "capacity_servings": 78,
+          "response": "accept",
+          "response_delay_min": 11
+        },
+        "recipient_006": {
+          "capacity_servings": 43,
+          "response": "accept",
+          "response_delay_min": 11
+        },
+        "recipient_007": {
+          "capacity_servings": 79,
+          "response": "accept",
+          "response_delay_min": 2
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": true,
+          "ready_in_min": 6
+        },
+        "driver_002": {
+          "available": true,
+          "ready_in_min": 5
+        },
+        "driver_003": {
+          "available": true,
+          "ready_in_min": 8
+        },
+        "driver_004": {
+          "available": true,
+          "ready_in_min": 1
+        }
+      },
+      "capability_replies": {
+        "recipient_005": {
+          "has_reheating_facilities": false
+        }
+      },
+      "expected_outcome": {
+        "note": "generated scenario; no hand-verified expectation, evaluated in aggregate only (see run_evaluation.py)"
+      }
+    },
+    "generated_005": {
+      "label": "Generated evaluation scenario 005",
+      "scenario_start": "2026-09-14T17:24:00+05:30",
+      "offer": {
+        "offer_id": "gen_offer_005",
+        "donor_id": "donor_corporate_canteen_005",
+        "donor_has_valid_licence": true,
+        "food_type": "pre_packed",
+        "quantity_servings": 58,
+        "perishable": true,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T22:11:00+05:30",
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": true,
+        "donor_location": {
+          "lat": 22.5648,
+          "lng": 88.3428
+        },
+        "label": {
+          "item_name": "Dal, rice, and mixed sabzi",
+          "manufacturer_info": "Corporate Canteen",
+          "ingredients": [
+            "mixed ingredients \u2014 see original packaging"
+          ],
+          "expiry_date": "2026-09-14T22:11:00+05:30",
+          "masked": false
+        }
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 83,
+          "response": "accept",
+          "response_delay_min": 1
+        },
+        "recipient_002": {
+          "capacity_servings": 90,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_003": {
+          "capacity_servings": 18,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_004": {
+          "capacity_servings": 19,
+          "response": "accept",
+          "response_delay_min": 11
+        },
+        "recipient_005": {
+          "capacity_servings": 44,
+          "response": "decline",
+          "response_delay_min": 9
+        },
+        "recipient_006": {
+          "capacity_servings": 85,
+          "response": "accept",
+          "response_delay_min": 9
+        },
+        "recipient_007": {
+          "capacity_servings": 31,
+          "response": "accept",
+          "response_delay_min": 6
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": true,
+          "ready_in_min": 3
+        },
+        "driver_002": {
+          "available": true,
+          "ready_in_min": 0
+        },
+        "driver_003": {
+          "available": true,
+          "ready_in_min": 6
+        },
+        "driver_004": {
+          "available": false,
+          "ready_in_min": null
+        }
+      },
+      "capability_replies": {
+        "recipient_002": {
+          "has_valid_licence_or_registration": true
+        },
+        "recipient_005": {
+          "has_reheating_facilities": true
+        }
+      },
+      "expected_outcome": {
+        "note": "generated scenario; no hand-verified expectation, evaluated in aggregate only (see run_evaluation.py)"
+      }
+    },
+    "generated_006": {
+      "label": "Generated evaluation scenario 006",
+      "scenario_start": "2026-09-14T17:00:00+05:30",
+      "offer": {
+        "offer_id": "gen_offer_006",
+        "donor_id": "donor_restaurant_006",
+        "donor_has_valid_licence": true,
+        "food_type": "prepared_meal",
+        "quantity_servings": 59,
+        "perishable": true,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T20:44:00+05:30",
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": true,
+        "donor_location": {
+          "lat": 22.5551,
+          "lng": 88.3411
+        },
+        "label": {
+          "food_name": "Vegetable fried rice and manchurian",
+          "source": "Restaurant",
+          "preparation_date": "2026-09-14T14:58:00+05:30",
+          "last_consumption_date": "2026-09-14T20:44:00+05:30",
+          "vegetarian": true,
+          "masked": false
+        }
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 75,
+          "response": "accept",
+          "response_delay_min": 14
+        },
+        "recipient_002": {
+          "capacity_servings": 30,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_003": {
+          "capacity_servings": 47,
+          "response": "accept",
+          "response_delay_min": 7
+        },
+        "recipient_004": {
+          "capacity_servings": 63,
+          "response": "decline",
+          "response_delay_min": 8
+        },
+        "recipient_005": {
+          "capacity_servings": 86,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_006": {
+          "capacity_servings": 56,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_007": {
+          "capacity_servings": 81,
+          "response": "decline",
+          "response_delay_min": 14
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": true,
+          "ready_in_min": 14
+        },
+        "driver_002": {
+          "available": true,
+          "ready_in_min": 13
+        },
+        "driver_003": {
+          "available": true,
+          "ready_in_min": 1
+        },
+        "driver_004": {
+          "available": true,
+          "ready_in_min": 14
+        }
+      },
+      "capability_replies": {
+        "recipient_002": {
+          "has_valid_licence_or_registration": false
+        },
+        "recipient_005": {
+          "has_reheating_facilities": false
+        }
+      },
+      "expected_outcome": {
+        "note": "generated scenario; no hand-verified expectation, evaluated in aggregate only (see run_evaluation.py)"
+      }
+    },
+    "generated_007": {
+      "label": "Generated evaluation scenario 007",
+      "scenario_start": "2026-09-14T14:03:00+05:30",
+      "offer": {
+        "offer_id": "gen_offer_007",
+        "donor_id": "donor_wedding_hall_007",
+        "donor_has_valid_licence": true,
+        "food_type": "prepared_meal",
+        "quantity_servings": 35,
+        "perishable": true,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T16:14:00+05:30",
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": true,
+        "donor_location": {
+          "lat": 22.535,
+          "lng": 88.3565
+        },
+        "label": {
+          "food_name": "Mixed vegetable biryani and raita",
+          "source": "Wedding Hall",
+          "preparation_date": "2026-09-14T13:24:00+05:30",
+          "last_consumption_date": "2026-09-14T16:14:00+05:30",
+          "vegetarian": true,
+          "masked": false
+        }
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 51,
+          "response": "accept",
+          "response_delay_min": 12
+        },
+        "recipient_002": {
+          "capacity_servings": 87,
+          "response": "accept",
+          "response_delay_min": 4
+        },
+        "recipient_003": {
+          "capacity_servings": 18,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_004": {
+          "capacity_servings": 79,
+          "response": "accept",
+          "response_delay_min": 4
+        },
+        "recipient_005": {
+          "capacity_servings": 69,
+          "response": "accept",
+          "response_delay_min": 14
+        },
+        "recipient_006": {
+          "capacity_servings": 74,
+          "response": "accept",
+          "response_delay_min": 9
+        },
+        "recipient_007": {
+          "capacity_servings": 80,
+          "response": "decline",
+          "response_delay_min": 11
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": true,
+          "ready_in_min": 13
+        },
+        "driver_002": {
+          "available": true,
+          "ready_in_min": 6
+        },
+        "driver_003": {
+          "available": false,
+          "ready_in_min": null
+        },
+        "driver_004": {
+          "available": true,
+          "ready_in_min": 15
+        }
+      },
+      "capability_replies": {
+        "recipient_002": {
+          "has_valid_licence_or_registration": true
+        }
+      },
+      "expected_outcome": {
+        "note": "generated scenario; no hand-verified expectation, evaluated in aggregate only (see run_evaluation.py)"
+      }
+    },
+    "generated_008": {
+      "label": "Generated evaluation scenario 008",
+      "scenario_start": "2026-09-14T17:44:00+05:30",
+      "offer": {
+        "offer_id": "gen_offer_008",
+        "donor_id": "donor_hostel_mess_008",
+        "donor_has_valid_licence": true,
+        "food_type": "prepared_meal",
+        "quantity_servings": 80,
+        "perishable": false,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T19:45:00+05:30",
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": true,
+        "donor_location": {
+          "lat": 22.5716,
+          "lng": 88.366
+        },
+        "label": {
+          "food_name": "Khichdi and mixed vegetable curry",
+          "source": "Hostel Mess",
+          "preparation_date": "2026-09-14T17:06:00+05:30",
+          "last_consumption_date": "2026-09-14T19:45:00+05:30",
+          "vegetarian": true,
+          "masked": false
+        }
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 73,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_002": {
+          "capacity_servings": 22,
+          "response": "decline",
+          "response_delay_min": 9
+        },
+        "recipient_003": {
+          "capacity_servings": 34,
+          "response": "accept",
+          "response_delay_min": 14
+        },
+        "recipient_004": {
+          "capacity_servings": 28,
+          "response": "accept",
+          "response_delay_min": 9
+        },
+        "recipient_005": {
+          "capacity_servings": 41,
+          "response": "decline",
+          "response_delay_min": 7
+        },
+        "recipient_006": {
+          "capacity_servings": 47,
+          "response": "accept",
+          "response_delay_min": 5
+        },
+        "recipient_007": {
+          "capacity_servings": 62,
+          "response": "accept",
+          "response_delay_min": 14
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": true,
+          "ready_in_min": 3
+        },
+        "driver_002": {
+          "available": true,
+          "ready_in_min": 15
+        },
+        "driver_003": {
+          "available": true,
+          "ready_in_min": 2
+        },
+        "driver_004": {
+          "available": false,
+          "ready_in_min": null
+        }
+      },
+      "capability_replies": {
+        "recipient_002": {
+          "has_valid_licence_or_registration": true
+        }
+      },
+      "expected_outcome": {
+        "note": "generated scenario; no hand-verified expectation, evaluated in aggregate only (see run_evaluation.py)"
+      }
+    },
+    "generated_009": {
+      "label": "Generated evaluation scenario 009",
+      "scenario_start": "2026-09-14T14:56:00+05:30",
+      "offer": {
+        "offer_id": "gen_offer_009",
+        "donor_id": "donor_event_caterer_009",
+        "donor_has_valid_licence": true,
+        "food_type": "pre_packed",
+        "quantity_servings": 68,
+        "perishable": true,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T17:58:00+05:30",
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": true,
+        "donor_location": {
+          "lat": 22.5222,
+          "lng": 88.3722
+        },
+        "label": {
+          "item_name": "Paneer curry and chapati",
+          "manufacturer_info": "Event Catering Co.",
+          "ingredients": [
+            "mixed ingredients \u2014 see original packaging"
+          ],
+          "expiry_date": "2026-09-14T17:58:00+05:30",
+          "masked": false
+        }
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 41,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_002": {
+          "capacity_servings": 22,
+          "response": "accept",
+          "response_delay_min": 8
+        },
+        "recipient_003": {
+          "capacity_servings": 25,
+          "response": "decline",
+          "response_delay_min": 1
+        },
+        "recipient_004": {
+          "capacity_servings": 43,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_005": {
+          "capacity_servings": 86,
+          "response": "accept",
+          "response_delay_min": 14
+        },
+        "recipient_006": {
+          "capacity_servings": 15,
+          "response": "accept",
+          "response_delay_min": 12
+        },
+        "recipient_007": {
+          "capacity_servings": 86,
+          "response": "no_response",
+          "response_delay_min": null
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": true,
+          "ready_in_min": 12
+        },
+        "driver_002": {
+          "available": true,
+          "ready_in_min": 13
+        },
+        "driver_003": {
+          "available": true,
+          "ready_in_min": 8
+        },
+        "driver_004": {
+          "available": false,
+          "ready_in_min": null
+        }
+      },
+      "capability_replies": {
+        "recipient_002": {
+          "has_valid_licence_or_registration": false
+        },
+        "recipient_005": {
+          "has_reheating_facilities": false
+        }
+      },
+      "expected_outcome": {
+        "note": "generated scenario; no hand-verified expectation, evaluated in aggregate only (see run_evaluation.py)"
+      }
+    },
+    "generated_010": {
+      "label": "Generated evaluation scenario 010",
+      "scenario_start": "2026-09-14T12:07:00+05:30",
+      "offer": {
+        "offer_id": "gen_offer_010",
+        "donor_id": "donor_grocery_store_010",
+        "donor_has_valid_licence": true,
+        "food_type": "prepared_meal",
+        "quantity_servings": 62,
+        "perishable": false,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T15:18:00+05:30",
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": true,
+        "donor_location": {
+          "lat": 22.5554,
+          "lng": 88.3669
+        },
+        "label": {
+          "food_name": "Packaged bread and dairy overstock",
+          "source": "Grocery Store",
+          "preparation_date": "2026-09-14T10:55:00+05:30",
+          "last_consumption_date": "2026-09-14T15:18:00+05:30",
+          "vegetarian": true,
+          "masked": false
+        }
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 71,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_002": {
+          "capacity_servings": 22,
+          "response": "accept",
+          "response_delay_min": 5
+        },
+        "recipient_003": {
+          "capacity_servings": 19,
+          "response": "accept",
+          "response_delay_min": 2
+        },
+        "recipient_004": {
+          "capacity_servings": 75,
+          "response": "accept",
+          "response_delay_min": 13
+        },
+        "recipient_005": {
+          "capacity_servings": 47,
+          "response": "accept",
+          "response_delay_min": 8
+        },
+        "recipient_006": {
+          "capacity_servings": 78,
+          "response": "accept",
+          "response_delay_min": 14
+        },
+        "recipient_007": {
+          "capacity_servings": 72,
+          "response": "accept",
+          "response_delay_min": 7
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": false,
+          "ready_in_min": null
+        },
+        "driver_002": {
+          "available": true,
+          "ready_in_min": 8
+        },
+        "driver_003": {
+          "available": true,
+          "ready_in_min": 5
+        },
+        "driver_004": {
+          "available": true,
+          "ready_in_min": 13
+        }
+      },
+      "capability_replies": {
+        "recipient_002": {
+          "has_valid_licence_or_registration": true
+        },
+        "recipient_005": {
+          "has_reheating_facilities": true
+        }
+      },
+      "expected_outcome": {
+        "note": "generated scenario; no hand-verified expectation, evaluated in aggregate only (see run_evaluation.py)"
+      }
+    },
+    "generated_011": {
+      "label": "Generated evaluation scenario 011",
+      "scenario_start": "2026-09-14T14:48:00+05:30",
+      "offer": {
+        "offer_id": "gen_offer_011",
+        "donor_id": "donor_grocery_store_011",
+        "donor_has_valid_licence": true,
+        "food_type": "prepared_meal",
+        "quantity_servings": 45,
+        "perishable": true,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T19:37:00+05:30",
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": true,
+        "donor_location": {
+          "lat": 22.5514,
+          "lng": 88.3879
+        },
+        "label": {
+          "food_name": "Packaged bread and dairy overstock",
+          "source": "Grocery Store",
+          "preparation_date": "2026-09-14T13:45:00+05:30",
+          "last_consumption_date": "2026-09-14T19:37:00+05:30",
+          "vegetarian": true,
+          "masked": false
+        }
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 52,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_002": {
+          "capacity_servings": 58,
+          "response": "decline",
+          "response_delay_min": 4
+        },
+        "recipient_003": {
+          "capacity_servings": 43,
+          "response": "accept",
+          "response_delay_min": 8
+        },
+        "recipient_004": {
+          "capacity_servings": 15,
+          "response": "accept",
+          "response_delay_min": 2
+        },
+        "recipient_005": {
+          "capacity_servings": 79,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_006": {
+          "capacity_servings": 88,
+          "response": "accept",
+          "response_delay_min": 7
+        },
+        "recipient_007": {
+          "capacity_servings": 44,
+          "response": "accept",
+          "response_delay_min": 14
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": false,
+          "ready_in_min": null
+        },
+        "driver_002": {
+          "available": true,
+          "ready_in_min": 13
+        },
+        "driver_003": {
+          "available": false,
+          "ready_in_min": null
+        },
+        "driver_004": {
+          "available": false,
+          "ready_in_min": null
+        }
+      },
+      "capability_replies": {
+        "recipient_002": {
+          "has_valid_licence_or_registration": false
+        },
+        "recipient_005": {
+          "has_reheating_facilities": true
+        }
+      },
+      "expected_outcome": {
+        "note": "generated scenario; no hand-verified expectation, evaluated in aggregate only (see run_evaluation.py)"
+      }
+    },
+    "generated_012": {
+      "label": "Generated evaluation scenario 012",
+      "scenario_start": "2026-09-14T12:37:00+05:30",
+      "offer": {
+        "offer_id": "gen_offer_012",
+        "donor_id": "donor_wedding_hall_012",
+        "donor_has_valid_licence": true,
+        "food_type": "prepared_meal",
+        "quantity_servings": 38,
+        "perishable": true,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T16:46:00+05:30",
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": true,
+        "donor_location": {
+          "lat": 22.5292,
+          "lng": 88.3648
+        },
+        "label": {
+          "food_name": "Mixed vegetable biryani and raita",
+          "source": "Wedding Hall",
+          "preparation_date": "2026-09-14T11:36:00+05:30",
+          "last_consumption_date": "2026-09-14T16:46:00+05:30",
+          "vegetarian": true,
+          "masked": false
+        }
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 31,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_002": {
+          "capacity_servings": 67,
+          "response": "decline",
+          "response_delay_min": 12
+        },
+        "recipient_003": {
+          "capacity_servings": 54,
+          "response": "accept",
+          "response_delay_min": 12
+        },
+        "recipient_004": {
+          "capacity_servings": 40,
+          "response": "accept",
+          "response_delay_min": 10
+        },
+        "recipient_005": {
+          "capacity_servings": 72,
+          "response": "accept",
+          "response_delay_min": 12
+        },
+        "recipient_006": {
+          "capacity_servings": 30,
+          "response": "accept",
+          "response_delay_min": 9
+        },
+        "recipient_007": {
+          "capacity_servings": 47,
+          "response": "accept",
+          "response_delay_min": 4
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": true,
+          "ready_in_min": 13
+        },
+        "driver_002": {
+          "available": false,
+          "ready_in_min": null
+        },
+        "driver_003": {
+          "available": true,
+          "ready_in_min": 8
+        },
+        "driver_004": {
+          "available": false,
+          "ready_in_min": null
+        }
+      },
+      "capability_replies": {
+        "recipient_002": {
+          "has_valid_licence_or_registration": true
+        },
+        "recipient_005": {
+          "has_reheating_facilities": true
+        }
+      },
+      "expected_outcome": {
+        "note": "generated scenario; no hand-verified expectation, evaluated in aggregate only (see run_evaluation.py)"
+      }
+    },
+    "generated_013": {
+      "label": "Generated evaluation scenario 013",
+      "scenario_start": "2026-09-14T14:02:00+05:30",
+      "offer": {
+        "offer_id": "gen_offer_013",
+        "donor_id": "donor_conference_center_013",
+        "donor_has_valid_licence": true,
+        "food_type": "pre_packed",
+        "quantity_servings": 24,
+        "perishable": false,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T16:20:00+05:30",
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": true,
+        "donor_location": {
+          "lat": 22.5972,
+          "lng": 88.3741
+        },
+        "label": {
+          "item_name": "Boxed vegetarian lunch sets",
+          "manufacturer_info": "Conference Center",
+          "ingredients": [
+            "mixed ingredients \u2014 see original packaging"
+          ],
+          "expiry_date": "2026-09-14T16:20:00+05:30",
+          "masked": false
+        }
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 74,
+          "response": "accept",
+          "response_delay_min": 5
+        },
+        "recipient_002": {
+          "capacity_servings": 32,
+          "response": "accept",
+          "response_delay_min": 6
+        },
+        "recipient_003": {
+          "capacity_servings": 40,
+          "response": "decline",
+          "response_delay_min": 11
+        },
+        "recipient_004": {
+          "capacity_servings": 79,
+          "response": "accept",
+          "response_delay_min": 3
+        },
+        "recipient_005": {
+          "capacity_servings": 23,
+          "response": "accept",
+          "response_delay_min": 5
+        },
+        "recipient_006": {
+          "capacity_servings": 69,
+          "response": "accept",
+          "response_delay_min": 2
+        },
+        "recipient_007": {
+          "capacity_servings": 22,
+          "response": "accept",
+          "response_delay_min": 10
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": true,
+          "ready_in_min": 12
+        },
+        "driver_002": {
+          "available": true,
+          "ready_in_min": 8
+        },
+        "driver_003": {
+          "available": true,
+          "ready_in_min": 0
+        },
+        "driver_004": {
+          "available": true,
+          "ready_in_min": 15
+        }
+      },
+      "capability_replies": {
+        "recipient_002": {
+          "has_valid_licence_or_registration": true
+        },
+        "recipient_005": {
+          "has_reheating_facilities": true
+        }
+      },
+      "expected_outcome": {
+        "note": "generated scenario; no hand-verified expectation, evaluated in aggregate only (see run_evaluation.py)"
+      }
+    },
+    "generated_014": {
+      "label": "Generated evaluation scenario 014",
+      "scenario_start": "2026-09-14T17:51:00+05:30",
+      "offer": {
+        "offer_id": "gen_offer_014",
+        "donor_id": "donor_restaurant_014",
+        "donor_has_valid_licence": true,
+        "food_type": "prepared_meal",
+        "quantity_servings": 71,
+        "perishable": true,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T20:15:00+05:30",
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": false,
+        "donor_location": {
+          "lat": 22.5931,
+          "lng": 88.3498
+        },
+        "label": {
+          "food_name": "Vegetable fried rice and manchurian",
+          "source": "Restaurant",
+          "preparation_date": "2026-09-14T15:51:00+05:30",
+          "last_consumption_date": "2026-09-14T20:15:00+05:30",
+          "vegetarian": true,
+          "masked": false
+        }
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 19,
+          "response": "accept",
+          "response_delay_min": 8
+        },
+        "recipient_002": {
+          "capacity_servings": 66,
+          "response": "accept",
+          "response_delay_min": 11
+        },
+        "recipient_003": {
+          "capacity_servings": 82,
+          "response": "accept",
+          "response_delay_min": 14
+        },
+        "recipient_004": {
+          "capacity_servings": 27,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_005": {
+          "capacity_servings": 39,
+          "response": "accept",
+          "response_delay_min": 5
+        },
+        "recipient_006": {
+          "capacity_servings": 45,
+          "response": "accept",
+          "response_delay_min": 8
+        },
+        "recipient_007": {
+          "capacity_servings": 51,
+          "response": "accept",
+          "response_delay_min": 6
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": true,
+          "ready_in_min": 6
+        },
+        "driver_002": {
+          "available": false,
+          "ready_in_min": null
+        },
+        "driver_003": {
+          "available": false,
+          "ready_in_min": null
+        },
+        "driver_004": {
+          "available": true,
+          "ready_in_min": 3
+        }
+      },
+      "capability_replies": {
+        "recipient_002": {
+          "has_valid_licence_or_registration": true
+        }
+      },
+      "expected_outcome": {
+        "note": "generated scenario; no hand-verified expectation, evaluated in aggregate only (see run_evaluation.py)"
+      }
+    },
+    "generated_015": {
+      "label": "Generated evaluation scenario 015",
+      "scenario_start": "2026-09-14T15:15:00+05:30",
+      "offer": {
+        "offer_id": "gen_offer_015",
+        "donor_id": "donor_restaurant_015",
+        "donor_has_valid_licence": true,
+        "food_type": "pre_packed",
+        "quantity_servings": 61,
+        "perishable": true,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T18:15:00+05:30",
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": true,
+        "donor_location": {
+          "lat": 22.5255,
+          "lng": 88.3405
+        },
+        "label": {
+          "item_name": "Vegetable fried rice and manchurian",
+          "manufacturer_info": "Restaurant",
+          "ingredients": [
+            "mixed ingredients \u2014 see original packaging"
+          ],
+          "expiry_date": "2026-09-14T18:15:00+05:30",
+          "masked": false
+        }
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 69,
+          "response": "accept",
+          "response_delay_min": 8
+        },
+        "recipient_002": {
+          "capacity_servings": 79,
+          "response": "accept",
+          "response_delay_min": 8
+        },
+        "recipient_003": {
+          "capacity_servings": 22,
+          "response": "decline",
+          "response_delay_min": 3
+        },
+        "recipient_004": {
+          "capacity_servings": 31,
+          "response": "accept",
+          "response_delay_min": 3
+        },
+        "recipient_005": {
+          "capacity_servings": 55,
+          "response": "accept",
+          "response_delay_min": 8
+        },
+        "recipient_006": {
+          "capacity_servings": 16,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_007": {
+          "capacity_servings": 84,
+          "response": "accept",
+          "response_delay_min": 8
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": false,
+          "ready_in_min": null
+        },
+        "driver_002": {
+          "available": true,
+          "ready_in_min": 11
+        },
+        "driver_003": {
+          "available": false,
+          "ready_in_min": null
+        },
+        "driver_004": {
+          "available": true,
+          "ready_in_min": 14
+        }
+      },
+      "capability_replies": {
+        "recipient_002": {
+          "has_valid_licence_or_registration": true
+        },
+        "recipient_005": {
+          "has_reheating_facilities": true
+        }
+      },
+      "expected_outcome": {
+        "note": "generated scenario; no hand-verified expectation, evaluated in aggregate only (see run_evaluation.py)"
+      }
+    },
+    "generated_016": {
+      "label": "Generated evaluation scenario 016",
+      "scenario_start": "2026-09-14T15:56:00+05:30",
+      "offer": {
+        "offer_id": "gen_offer_016",
+        "donor_id": "donor_bakery_016",
+        "donor_has_valid_licence": true,
+        "food_type": "prepared_meal",
+        "quantity_servings": 79,
+        "perishable": true,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T20:39:00+05:30",
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": true,
+        "donor_location": {
+          "lat": 22.5775,
+          "lng": 88.3609
+        },
+        "label": {
+          "food_name": "Packaged bakery items nearing best-before",
+          "source": "Bakery",
+          "preparation_date": "2026-09-14T15:24:00+05:30",
+          "last_consumption_date": "2026-09-14T20:39:00+05:30",
+          "vegetarian": true,
+          "masked": false
+        }
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 50,
+          "response": "accept",
+          "response_delay_min": 8
+        },
+        "recipient_002": {
+          "capacity_servings": 89,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_003": {
+          "capacity_servings": 20,
+          "response": "accept",
+          "response_delay_min": 8
+        },
+        "recipient_004": {
+          "capacity_servings": 37,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_005": {
+          "capacity_servings": 59,
+          "response": "accept",
+          "response_delay_min": 2
+        },
+        "recipient_006": {
+          "capacity_servings": 56,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_007": {
+          "capacity_servings": 23,
+          "response": "decline",
+          "response_delay_min": 13
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": false,
+          "ready_in_min": null
+        },
+        "driver_002": {
+          "available": true,
+          "ready_in_min": 1
+        },
+        "driver_003": {
+          "available": true,
+          "ready_in_min": 0
+        },
+        "driver_004": {
+          "available": true,
+          "ready_in_min": 14
+        }
+      },
+      "capability_replies": {
+        "recipient_005": {
+          "has_reheating_facilities": false
+        }
+      },
+      "expected_outcome": {
+        "note": "generated scenario; no hand-verified expectation, evaluated in aggregate only (see run_evaluation.py)"
+      }
+    },
+    "generated_017": {
+      "label": "Generated evaluation scenario 017",
+      "scenario_start": "2026-09-14T13:19:00+05:30",
+      "offer": {
+        "offer_id": "gen_offer_017",
+        "donor_id": "donor_grocery_store_017",
+        "donor_has_valid_licence": true,
+        "food_type": "pre_packed",
+        "quantity_servings": 34,
+        "perishable": false,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T15:48:00+05:30",
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": true,
+        "donor_location": {
+          "lat": 22.5599,
+          "lng": 88.387
+        },
+        "label": {
+          "item_name": "Packaged bread and dairy overstock",
+          "manufacturer_info": "Grocery Store",
+          "ingredients": [
+            "mixed ingredients \u2014 see original packaging"
+          ],
+          "expiry_date": "2026-09-14T15:48:00+05:30",
+          "masked": false
+        }
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 46,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_002": {
+          "capacity_servings": 67,
+          "response": "accept",
+          "response_delay_min": 14
+        },
+        "recipient_003": {
+          "capacity_servings": 52,
+          "response": "accept",
+          "response_delay_min": 3
+        },
+        "recipient_004": {
+          "capacity_servings": 36,
+          "response": "accept",
+          "response_delay_min": 13
+        },
+        "recipient_005": {
+          "capacity_servings": 89,
+          "response": "accept",
+          "response_delay_min": 6
+        },
+        "recipient_006": {
+          "capacity_servings": 34,
+          "response": "decline",
+          "response_delay_min": 7
+        },
+        "recipient_007": {
+          "capacity_servings": 50,
+          "response": "accept",
+          "response_delay_min": 10
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": true,
+          "ready_in_min": 12
+        },
+        "driver_002": {
+          "available": true,
+          "ready_in_min": 14
+        },
+        "driver_003": {
+          "available": true,
+          "ready_in_min": 10
+        },
+        "driver_004": {
+          "available": true,
+          "ready_in_min": 2
+        }
+      },
+      "capability_replies": {
+        "recipient_002": {
+          "has_valid_licence_or_registration": true
+        },
+        "recipient_005": {
+          "has_reheating_facilities": true
+        }
+      },
+      "expected_outcome": {
+        "note": "generated scenario; no hand-verified expectation, evaluated in aggregate only (see run_evaluation.py)"
+      }
+    },
+    "generated_018": {
+      "label": "Generated evaluation scenario 018",
+      "scenario_start": "2026-09-14T14:36:00+05:30",
+      "offer": {
+        "offer_id": "gen_offer_018",
+        "donor_id": "donor_bakery_018",
+        "donor_has_valid_licence": true,
+        "food_type": "prepared_meal",
+        "quantity_servings": 83,
+        "perishable": true,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T19:11:00+05:30",
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": true,
+        "donor_location": {
+          "lat": 22.5498,
+          "lng": 88.3873
+        },
+        "label": {
+          "food_name": "Packaged bakery items nearing best-before",
+          "source": "Bakery",
+          "preparation_date": "2026-09-14T12:53:00+05:30",
+          "last_consumption_date": "2026-09-14T19:11:00+05:30",
+          "vegetarian": true,
+          "masked": false
+        }
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 23,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_002": {
+          "capacity_servings": 22,
+          "response": "accept",
+          "response_delay_min": 2
+        },
+        "recipient_003": {
+          "capacity_servings": 29,
+          "response": "accept",
+          "response_delay_min": 10
+        },
+        "recipient_004": {
+          "capacity_servings": 55,
+          "response": "accept",
+          "response_delay_min": 1
+        },
+        "recipient_005": {
+          "capacity_servings": 27,
+          "response": "decline",
+          "response_delay_min": 8
+        },
+        "recipient_006": {
+          "capacity_servings": 40,
+          "response": "accept",
+          "response_delay_min": 12
+        },
+        "recipient_007": {
+          "capacity_servings": 40,
+          "response": "no_response",
+          "response_delay_min": null
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": true,
+          "ready_in_min": 0
+        },
+        "driver_002": {
+          "available": true,
+          "ready_in_min": 6
+        },
+        "driver_003": {
+          "available": true,
+          "ready_in_min": 6
+        },
+        "driver_004": {
+          "available": false,
+          "ready_in_min": null
+        }
+      },
+      "capability_replies": {},
+      "expected_outcome": {
+        "note": "generated scenario; no hand-verified expectation, evaluated in aggregate only (see run_evaluation.py)"
+      }
+    },
+    "generated_019": {
+      "label": "Generated evaluation scenario 019",
+      "scenario_start": "2026-09-14T12:43:00+05:30",
+      "offer": {
+        "offer_id": "gen_offer_019",
+        "donor_id": "donor_hostel_mess_019",
+        "donor_has_valid_licence": true,
+        "food_type": "pre_packed",
+        "quantity_servings": 80,
+        "perishable": true,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T15:07:00+05:30",
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": true,
+        "donor_location": {
+          "lat": 22.5517,
+          "lng": 88.3411
+        },
+        "label": {
+          "item_name": "Khichdi and mixed vegetable curry",
+          "manufacturer_info": "Hostel Mess",
+          "ingredients": [
+            "mixed ingredients \u2014 see original packaging"
+          ],
+          "expiry_date": "2026-09-14T15:07:00+05:30",
+          "masked": false
+        }
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 59,
+          "response": "decline",
+          "response_delay_min": 4
+        },
+        "recipient_002": {
+          "capacity_servings": 79,
+          "response": "accept",
+          "response_delay_min": 8
+        },
+        "recipient_003": {
+          "capacity_servings": 18,
+          "response": "decline",
+          "response_delay_min": 10
+        },
+        "recipient_004": {
+          "capacity_servings": 15,
+          "response": "accept",
+          "response_delay_min": 13
+        },
+        "recipient_005": {
+          "capacity_servings": 79,
+          "response": "accept",
+          "response_delay_min": 7
+        },
+        "recipient_006": {
+          "capacity_servings": 72,
+          "response": "decline",
+          "response_delay_min": 12
+        },
+        "recipient_007": {
+          "capacity_servings": 34,
+          "response": "accept",
+          "response_delay_min": 2
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": true,
+          "ready_in_min": 6
+        },
+        "driver_002": {
+          "available": true,
+          "ready_in_min": 4
+        },
+        "driver_003": {
+          "available": true,
+          "ready_in_min": 4
+        },
+        "driver_004": {
+          "available": false,
+          "ready_in_min": null
+        }
+      },
+      "capability_replies": {
+        "recipient_005": {
+          "has_reheating_facilities": false
+        }
+      },
+      "expected_outcome": {
+        "note": "generated scenario; no hand-verified expectation, evaluated in aggregate only (see run_evaluation.py)"
+      }
+    },
+    "generated_020": {
+      "label": "Generated evaluation scenario 020",
+      "scenario_start": "2026-09-14T12:46:00+05:30",
+      "offer": {
+        "offer_id": "gen_offer_020",
+        "donor_id": "donor_grocery_store_020",
+        "donor_has_valid_licence": true,
+        "food_type": "prepared_meal",
+        "quantity_servings": 27,
+        "perishable": false,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T16:19:00+05:30",
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": true,
+        "donor_location": {
+          "lat": 22.5325,
+          "lng": 88.3533
+        },
+        "label": {
+          "food_name": "Packaged bread and dairy overstock",
+          "source": "Grocery Store",
+          "preparation_date": "2026-09-14T11:17:00+05:30",
+          "last_consumption_date": "2026-09-14T16:19:00+05:30",
+          "vegetarian": true,
+          "masked": false
+        }
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 44,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_002": {
+          "capacity_servings": 29,
+          "response": "accept",
+          "response_delay_min": 5
+        },
+        "recipient_003": {
+          "capacity_servings": 46,
+          "response": "accept",
+          "response_delay_min": 14
+        },
+        "recipient_004": {
+          "capacity_servings": 32,
+          "response": "accept",
+          "response_delay_min": 3
+        },
+        "recipient_005": {
+          "capacity_servings": 46,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_006": {
+          "capacity_servings": 38,
+          "response": "accept",
+          "response_delay_min": 9
+        },
+        "recipient_007": {
+          "capacity_servings": 73,
+          "response": "accept",
+          "response_delay_min": 3
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": true,
+          "ready_in_min": 1
+        },
+        "driver_002": {
+          "available": false,
+          "ready_in_min": null
+        },
+        "driver_003": {
+          "available": true,
+          "ready_in_min": 0
+        },
+        "driver_004": {
+          "available": true,
+          "ready_in_min": 9
+        }
+      },
+      "capability_replies": {},
+      "expected_outcome": {
+        "note": "generated scenario; no hand-verified expectation, evaluated in aggregate only (see run_evaluation.py)"
+      }
+    },
+    "generated_021": {
+      "label": "Generated evaluation scenario 021",
+      "scenario_start": "2026-09-14T15:54:00+05:30",
+      "offer": {
+        "offer_id": "gen_offer_021",
+        "donor_id": "donor_wedding_hall_021",
+        "donor_has_valid_licence": true,
+        "food_type": "prepared_meal",
+        "quantity_servings": 45,
+        "perishable": true,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T20:15:00+05:30",
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": true,
+        "donor_location": {
+          "lat": 22.5946,
+          "lng": 88.3684
+        },
+        "label": {
+          "food_name": "Mixed vegetable biryani and raita",
+          "source": "Wedding Hall",
+          "preparation_date": "2026-09-14T13:59:00+05:30",
+          "last_consumption_date": "2026-09-14T20:15:00+05:30",
+          "vegetarian": true,
+          "masked": false
+        }
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 62,
+          "response": "accept",
+          "response_delay_min": 5
+        },
+        "recipient_002": {
+          "capacity_servings": 26,
+          "response": "accept",
+          "response_delay_min": 2
+        },
+        "recipient_003": {
+          "capacity_servings": 27,
+          "response": "accept",
+          "response_delay_min": 9
+        },
+        "recipient_004": {
+          "capacity_servings": 33,
+          "response": "accept",
+          "response_delay_min": 2
+        },
+        "recipient_005": {
+          "capacity_servings": 62,
+          "response": "accept",
+          "response_delay_min": 11
+        },
+        "recipient_006": {
+          "capacity_servings": 22,
+          "response": "decline",
+          "response_delay_min": 12
+        },
+        "recipient_007": {
+          "capacity_servings": 40,
+          "response": "accept",
+          "response_delay_min": 9
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": true,
+          "ready_in_min": 8
+        },
+        "driver_002": {
+          "available": true,
+          "ready_in_min": 14
+        },
+        "driver_003": {
+          "available": true,
+          "ready_in_min": 12
+        },
+        "driver_004": {
+          "available": true,
+          "ready_in_min": 8
+        }
+      },
+      "capability_replies": {
+        "recipient_002": {
+          "has_valid_licence_or_registration": false
+        },
+        "recipient_005": {
+          "has_reheating_facilities": true
+        }
+      },
+      "expected_outcome": {
+        "note": "generated scenario; no hand-verified expectation, evaluated in aggregate only (see run_evaluation.py)"
+      }
+    },
+    "generated_022": {
+      "label": "Generated evaluation scenario 022",
+      "scenario_start": "2026-09-14T17:54:00+05:30",
+      "offer": {
+        "offer_id": "gen_offer_022",
+        "donor_id": "donor_grocery_store_022",
+        "donor_has_valid_licence": true,
+        "food_type": "prepared_meal",
+        "quantity_servings": 17,
+        "perishable": true,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T22:21:00+05:30",
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": true,
+        "donor_location": {
+          "lat": 22.5676,
+          "lng": 88.3642
+        },
+        "label": {
+          "food_name": "Packaged bread and dairy overstock",
+          "source": "Grocery Store",
+          "preparation_date": "2026-09-14T16:53:00+05:30",
+          "last_consumption_date": "2026-09-14T22:21:00+05:30",
+          "vegetarian": true,
+          "masked": false
+        }
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 76,
+          "response": "accept",
+          "response_delay_min": 6
+        },
+        "recipient_002": {
+          "capacity_servings": 54,
+          "response": "accept",
+          "response_delay_min": 3
+        },
+        "recipient_003": {
+          "capacity_servings": 53,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_004": {
+          "capacity_servings": 85,
+          "response": "accept",
+          "response_delay_min": 9
+        },
+        "recipient_005": {
+          "capacity_servings": 15,
+          "response": "accept",
+          "response_delay_min": 2
+        },
+        "recipient_006": {
+          "capacity_servings": 21,
+          "response": "accept",
+          "response_delay_min": 13
+        },
+        "recipient_007": {
+          "capacity_servings": 55,
+          "response": "decline",
+          "response_delay_min": 9
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": true,
+          "ready_in_min": 6
+        },
+        "driver_002": {
+          "available": true,
+          "ready_in_min": 13
+        },
+        "driver_003": {
+          "available": false,
+          "ready_in_min": null
+        },
+        "driver_004": {
+          "available": false,
+          "ready_in_min": null
+        }
+      },
+      "capability_replies": {
+        "recipient_005": {
+          "has_reheating_facilities": false
+        }
+      },
+      "expected_outcome": {
+        "note": "generated scenario; no hand-verified expectation, evaluated in aggregate only (see run_evaluation.py)"
+      }
+    },
+    "generated_023": {
+      "label": "Generated evaluation scenario 023",
+      "scenario_start": "2026-09-14T17:42:00+05:30",
+      "offer": {
+        "offer_id": "gen_offer_023",
+        "donor_id": "donor_hostel_mess_023",
+        "donor_has_valid_licence": true,
+        "food_type": "prepared_meal",
+        "quantity_servings": 16,
+        "perishable": false,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T22:21:00+05:30",
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": true,
+        "donor_location": {
+          "lat": 22.5677,
+          "lng": 88.3511
+        },
+        "label": {
+          "food_name": "Khichdi and mixed vegetable curry",
+          "source": "Hostel Mess",
+          "preparation_date": "2026-09-14T16:48:00+05:30",
+          "last_consumption_date": "2026-09-14T22:21:00+05:30",
+          "vegetarian": true,
+          "masked": false
+        }
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 87,
+          "response": "decline",
+          "response_delay_min": 10
+        },
+        "recipient_002": {
+          "capacity_servings": 88,
+          "response": "decline",
+          "response_delay_min": 6
+        },
+        "recipient_003": {
+          "capacity_servings": 42,
+          "response": "decline",
+          "response_delay_min": 10
+        },
+        "recipient_004": {
+          "capacity_servings": 66,
+          "response": "decline",
+          "response_delay_min": 4
+        },
+        "recipient_005": {
+          "capacity_servings": 34,
+          "response": "accept",
+          "response_delay_min": 9
+        },
+        "recipient_006": {
+          "capacity_servings": 38,
+          "response": "accept",
+          "response_delay_min": 9
+        },
+        "recipient_007": {
+          "capacity_servings": 74,
+          "response": "accept",
+          "response_delay_min": 14
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": true,
+          "ready_in_min": 3
+        },
+        "driver_002": {
+          "available": true,
+          "ready_in_min": 1
+        },
+        "driver_003": {
+          "available": true,
+          "ready_in_min": 12
+        },
+        "driver_004": {
+          "available": true,
+          "ready_in_min": 10
+        }
+      },
+      "capability_replies": {
+        "recipient_005": {
+          "has_reheating_facilities": true
+        }
+      },
+      "expected_outcome": {
+        "note": "generated scenario; no hand-verified expectation, evaluated in aggregate only (see run_evaluation.py)"
+      }
+    },
+    "generated_024": {
+      "label": "Generated evaluation scenario 024",
+      "scenario_start": "2026-09-14T15:58:00+05:30",
+      "offer": {
+        "offer_id": "gen_offer_024",
+        "donor_id": "donor_corporate_canteen_024",
+        "donor_has_valid_licence": true,
+        "food_type": "pre_packed",
+        "quantity_servings": 60,
+        "perishable": true,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T20:27:00+05:30",
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": true,
+        "donor_location": {
+          "lat": 22.546,
+          "lng": 88.3841
+        },
+        "label": {
+          "item_name": "Dal, rice, and mixed sabzi",
+          "manufacturer_info": "Corporate Canteen",
+          "ingredients": [
+            "mixed ingredients \u2014 see original packaging"
+          ],
+          "expiry_date": "2026-09-14T20:27:00+05:30",
+          "masked": false
+        }
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 58,
+          "response": "accept",
+          "response_delay_min": 5
+        },
+        "recipient_002": {
+          "capacity_servings": 67,
+          "response": "accept",
+          "response_delay_min": 6
+        },
+        "recipient_003": {
+          "capacity_servings": 89,
+          "response": "accept",
+          "response_delay_min": 6
+        },
+        "recipient_004": {
+          "capacity_servings": 44,
+          "response": "accept",
+          "response_delay_min": 7
+        },
+        "recipient_005": {
+          "capacity_servings": 80,
+          "response": "accept",
+          "response_delay_min": 4
+        },
+        "recipient_006": {
+          "capacity_servings": 52,
+          "response": "accept",
+          "response_delay_min": 3
+        },
+        "recipient_007": {
+          "capacity_servings": 39,
+          "response": "decline",
+          "response_delay_min": 4
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": false,
+          "ready_in_min": null
+        },
+        "driver_002": {
+          "available": false,
+          "ready_in_min": null
+        },
+        "driver_003": {
+          "available": false,
+          "ready_in_min": null
+        },
+        "driver_004": {
+          "available": false,
+          "ready_in_min": null
+        }
+      },
+      "capability_replies": {
+        "recipient_002": {
+          "has_valid_licence_or_registration": true
+        },
+        "recipient_005": {
+          "has_reheating_facilities": false
+        }
+      },
+      "expected_outcome": {
+        "note": "generated scenario; no hand-verified expectation, evaluated in aggregate only (see run_evaluation.py)"
+      }
+    },
+    "generated_025": {
+      "label": "Generated evaluation scenario 025",
+      "scenario_start": "2026-09-14T16:35:00+05:30",
+      "offer": {
+        "offer_id": "gen_offer_025",
+        "donor_id": "donor_bakery_025",
+        "donor_has_valid_licence": true,
+        "food_type": "prepared_meal",
+        "quantity_servings": 54,
+        "perishable": false,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T21:04:00+05:30",
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": true,
+        "donor_location": {
+          "lat": 22.554,
+          "lng": 88.3718
+        },
+        "label": {
+          "food_name": "Packaged bakery items nearing best-before",
+          "source": "Bakery",
+          "preparation_date": "2026-09-14T14:35:00+05:30",
+          "last_consumption_date": "2026-09-14T21:04:00+05:30",
+          "vegetarian": true,
+          "masked": false
+        }
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 83,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_002": {
+          "capacity_servings": 82,
+          "response": "decline",
+          "response_delay_min": 4
+        },
+        "recipient_003": {
+          "capacity_servings": 56,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_004": {
+          "capacity_servings": 72,
+          "response": "accept",
+          "response_delay_min": 14
+        },
+        "recipient_005": {
+          "capacity_servings": 27,
+          "response": "accept",
+          "response_delay_min": 6
+        },
+        "recipient_006": {
+          "capacity_servings": 72,
+          "response": "accept",
+          "response_delay_min": 2
+        },
+        "recipient_007": {
+          "capacity_servings": 38,
+          "response": "accept",
+          "response_delay_min": 1
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": true,
+          "ready_in_min": 4
+        },
+        "driver_002": {
+          "available": true,
+          "ready_in_min": 15
+        },
+        "driver_003": {
+          "available": false,
+          "ready_in_min": null
+        },
+        "driver_004": {
+          "available": false,
+          "ready_in_min": null
+        }
+      },
+      "capability_replies": {
+        "recipient_002": {
+          "has_valid_licence_or_registration": false
+        },
+        "recipient_005": {
+          "has_reheating_facilities": false
+        }
+      },
+      "expected_outcome": {
+        "note": "generated scenario; no hand-verified expectation, evaluated in aggregate only (see run_evaluation.py)"
+      }
+    },
+    "generated_026": {
+      "label": "Generated evaluation scenario 026",
+      "scenario_start": "2026-09-14T16:35:00+05:30",
+      "offer": {
+        "offer_id": "gen_offer_026",
+        "donor_id": "donor_conference_center_026",
+        "donor_has_valid_licence": true,
+        "food_type": "pre_packed",
+        "quantity_servings": 70,
+        "perishable": false,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T19:16:00+05:30",
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": true,
+        "donor_location": {
+          "lat": 22.5614,
+          "lng": 88.3696
+        },
+        "label": {
+          "item_name": "Boxed vegetarian lunch sets",
+          "manufacturer_info": "Conference Center",
+          "ingredients": [
+            "mixed ingredients \u2014 see original packaging"
+          ],
+          "expiry_date": "2026-09-14T19:16:00+05:30",
+          "masked": false
+        }
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 86,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_002": {
+          "capacity_servings": 25,
+          "response": "accept",
+          "response_delay_min": 4
+        },
+        "recipient_003": {
+          "capacity_servings": 84,
+          "response": "accept",
+          "response_delay_min": 8
+        },
+        "recipient_004": {
+          "capacity_servings": 29,
+          "response": "decline",
+          "response_delay_min": 10
+        },
+        "recipient_005": {
+          "capacity_servings": 35,
+          "response": "decline",
+          "response_delay_min": 2
+        },
+        "recipient_006": {
+          "capacity_servings": 55,
+          "response": "accept",
+          "response_delay_min": 4
+        },
+        "recipient_007": {
+          "capacity_servings": 45,
+          "response": "accept",
+          "response_delay_min": 11
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": true,
+          "ready_in_min": 13
+        },
+        "driver_002": {
+          "available": true,
+          "ready_in_min": 12
+        },
+        "driver_003": {
+          "available": true,
+          "ready_in_min": 0
+        },
+        "driver_004": {
+          "available": true,
+          "ready_in_min": 13
+        }
+      },
+      "capability_replies": {},
+      "expected_outcome": {
+        "note": "generated scenario; no hand-verified expectation, evaluated in aggregate only (see run_evaluation.py)"
+      }
+    },
+    "generated_027": {
+      "label": "Generated evaluation scenario 027",
+      "scenario_start": "2026-09-14T16:37:00+05:30",
+      "offer": {
+        "offer_id": "gen_offer_027",
+        "donor_id": "donor_bakery_027",
+        "donor_has_valid_licence": true,
+        "food_type": "prepared_meal",
+        "quantity_servings": 35,
+        "perishable": true,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T19:18:00+05:30",
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": true,
+        "donor_location": {
+          "lat": 22.5917,
+          "lng": 88.3481
+        },
+        "label": {
+          "food_name": "Packaged bakery items nearing best-before",
+          "source": "Bakery",
+          "preparation_date": "2026-09-14T15:30:00+05:30",
+          "last_consumption_date": "2026-09-14T19:18:00+05:30",
+          "vegetarian": true,
+          "masked": false
+        }
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 45,
+          "response": "decline",
+          "response_delay_min": 13
+        },
+        "recipient_002": {
+          "capacity_servings": 65,
+          "response": "accept",
+          "response_delay_min": 5
+        },
+        "recipient_003": {
+          "capacity_servings": 53,
+          "response": "accept",
+          "response_delay_min": 14
+        },
+        "recipient_004": {
+          "capacity_servings": 58,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_005": {
+          "capacity_servings": 78,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_006": {
+          "capacity_servings": 18,
+          "response": "accept",
+          "response_delay_min": 10
+        },
+        "recipient_007": {
+          "capacity_servings": 87,
+          "response": "accept",
+          "response_delay_min": 1
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": false,
+          "ready_in_min": null
+        },
+        "driver_002": {
+          "available": true,
+          "ready_in_min": 5
+        },
+        "driver_003": {
+          "available": true,
+          "ready_in_min": 9
+        },
+        "driver_004": {
+          "available": true,
+          "ready_in_min": 8
+        }
+      },
+      "capability_replies": {},
+      "expected_outcome": {
+        "note": "generated scenario; no hand-verified expectation, evaluated in aggregate only (see run_evaluation.py)"
+      }
+    },
+    "generated_028": {
+      "label": "Generated evaluation scenario 028",
+      "scenario_start": "2026-09-14T16:55:00+05:30",
+      "offer": {
+        "offer_id": "gen_offer_028",
+        "donor_id": "donor_wedding_hall_028",
+        "donor_has_valid_licence": true,
+        "food_type": "prepared_meal",
+        "quantity_servings": 74,
+        "perishable": true,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T21:02:00+05:30",
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": true,
+        "donor_location": {
+          "lat": 22.5392,
+          "lng": 88.3627
+        },
+        "label": {
+          "food_name": "Mixed vegetable biryani and raita",
+          "source": "Wedding Hall",
+          "preparation_date": "2026-09-14T14:55:00+05:30",
+          "last_consumption_date": "2026-09-14T21:02:00+05:30",
+          "vegetarian": true,
+          "masked": false
+        }
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 22,
+          "response": "accept",
+          "response_delay_min": 7
+        },
+        "recipient_002": {
+          "capacity_servings": 62,
+          "response": "accept",
+          "response_delay_min": 11
+        },
+        "recipient_003": {
+          "capacity_servings": 16,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_004": {
+          "capacity_servings": 32,
+          "response": "accept",
+          "response_delay_min": 10
+        },
+        "recipient_005": {
+          "capacity_servings": 42,
+          "response": "accept",
+          "response_delay_min": 3
+        },
+        "recipient_006": {
+          "capacity_servings": 15,
+          "response": "decline",
+          "response_delay_min": 7
+        },
+        "recipient_007": {
+          "capacity_servings": 55,
+          "response": "accept",
+          "response_delay_min": 13
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": false,
+          "ready_in_min": null
+        },
+        "driver_002": {
+          "available": true,
+          "ready_in_min": 1
+        },
+        "driver_003": {
+          "available": true,
+          "ready_in_min": 11
+        },
+        "driver_004": {
+          "available": false,
+          "ready_in_min": null
+        }
+      },
+      "capability_replies": {},
+      "expected_outcome": {
+        "note": "generated scenario; no hand-verified expectation, evaluated in aggregate only (see run_evaluation.py)"
+      }
+    },
+    "generated_029": {
+      "label": "Generated evaluation scenario 029",
+      "scenario_start": "2026-09-14T14:50:00+05:30",
+      "offer": {
+        "offer_id": "gen_offer_029",
+        "donor_id": "donor_corporate_canteen_029",
+        "donor_has_valid_licence": true,
+        "food_type": "prepared_meal",
+        "quantity_servings": 65,
+        "perishable": true,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T17:15:00+05:30",
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": true,
+        "donor_location": {
+          "lat": 22.5918,
+          "lng": 88.3808
+        },
+        "label": {
+          "food_name": "Dal, rice, and mixed sabzi",
+          "source": "Corporate Canteen",
+          "preparation_date": "2026-09-14T12:59:00+05:30",
+          "last_consumption_date": "2026-09-14T17:15:00+05:30",
+          "vegetarian": true,
+          "masked": false
+        }
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 55,
+          "response": "accept",
+          "response_delay_min": 9
+        },
+        "recipient_002": {
+          "capacity_servings": 28,
+          "response": "decline",
+          "response_delay_min": 1
+        },
+        "recipient_003": {
+          "capacity_servings": 61,
+          "response": "accept",
+          "response_delay_min": 10
+        },
+        "recipient_004": {
+          "capacity_servings": 18,
+          "response": "accept",
+          "response_delay_min": 13
+        },
+        "recipient_005": {
+          "capacity_servings": 39,
+          "response": "decline",
+          "response_delay_min": 8
+        },
+        "recipient_006": {
+          "capacity_servings": 41,
+          "response": "decline",
+          "response_delay_min": 14
+        },
+        "recipient_007": {
+          "capacity_servings": 82,
+          "response": "no_response",
+          "response_delay_min": null
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": false,
+          "ready_in_min": null
+        },
+        "driver_002": {
+          "available": true,
+          "ready_in_min": 10
+        },
+        "driver_003": {
+          "available": true,
+          "ready_in_min": 15
+        },
+        "driver_004": {
+          "available": true,
+          "ready_in_min": 14
+        }
+      },
+      "capability_replies": {},
+      "expected_outcome": {
+        "note": "generated scenario; no hand-verified expectation, evaluated in aggregate only (see run_evaluation.py)"
+      }
+    },
+    "generated_030": {
+      "label": "Generated evaluation scenario 030",
+      "scenario_start": "2026-09-14T16:44:00+05:30",
+      "offer": {
+        "offer_id": "gen_offer_030",
+        "donor_id": "donor_grocery_store_030",
+        "donor_has_valid_licence": true,
+        "food_type": "prepared_meal",
+        "quantity_servings": 48,
+        "perishable": false,
+        "served_to_customers": false,
+        "consumption_deadline": "2026-09-14T21:43:00+05:30",
+        "segregated_by_perishability": true,
+        "packed_against_contamination": true,
+        "stored_with_waste": false,
+        "container_date_marked": true,
+        "donor_location": {
+          "lat": 22.5536,
+          "lng": 88.3477
+        },
+        "label": {
+          "food_name": "Packaged bread and dairy overstock",
+          "source": "Grocery Store",
+          "preparation_date": "2026-09-14T14:45:00+05:30",
+          "last_consumption_date": "2026-09-14T21:43:00+05:30",
+          "vegetarian": true,
+          "masked": false
+        }
+      },
+      "recipient_state": {
+        "recipient_001": {
+          "capacity_servings": 15,
+          "response": "no_response",
+          "response_delay_min": null
+        },
+        "recipient_002": {
+          "capacity_servings": 68,
+          "response": "accept",
+          "response_delay_min": 8
+        },
+        "recipient_003": {
+          "capacity_servings": 32,
+          "response": "accept",
+          "response_delay_min": 8
+        },
+        "recipient_004": {
+          "capacity_servings": 42,
+          "response": "accept",
+          "response_delay_min": 14
+        },
+        "recipient_005": {
+          "capacity_servings": 37,
+          "response": "accept",
+          "response_delay_min": 11
+        },
+        "recipient_006": {
+          "capacity_servings": 83,
+          "response": "accept",
+          "response_delay_min": 10
+        },
+        "recipient_007": {
+          "capacity_servings": 27,
+          "response": "accept",
+          "response_delay_min": 5
+        }
+      },
+      "driver_state": {
+        "driver_001": {
+          "available": false,
+          "ready_in_min": null
+        },
+        "driver_002": {
+          "available": true,
+          "ready_in_min": 10
+        },
+        "driver_003": {
+          "available": true,
+          "ready_in_min": 8
+        },
+        "driver_004": {
+          "available": true,
+          "ready_in_min": 12
+        }
+      },
+      "capability_replies": {
+        "recipient_002": {
+          "has_valid_licence_or_registration": true
+        },
+        "recipient_005": {
+          "has_reheating_facilities": false
+        }
+      },
+      "expected_outcome": {
+        "note": "generated scenario; no hand-verified expectation, evaluated in aggregate only (see run_evaluation.py)"
+      }
+    }
+  }
+}

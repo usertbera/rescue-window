@@ -171,9 +171,35 @@ Replans: 10
 ```
 
 At n=3, report the raw fraction, not a percentage dressed up as a rate — `Metrics.render()`
-says so explicitly. A larger generated evaluation set (varying quantity, deadline pressure,
-perishability, response patterns, driver availability) is the natural next step and is not
-yet built — see [Limitations](#limitations--whats-not-built).
+says so explicitly. That's why a larger generated set exists: `generate_evaluation_scenarios.py`
+scripts 30 scenarios from a fixed seed (reproducible — regenerating it byte-for-byte
+reproduces this file), varying quantity, deadline pressure, perishability, recipient response
+patterns, driver availability, and unresolved-capability outcomes. Every generated offer still
+clears the safety gate by construction, so this set evaluates the *coordination* loop —
+replanning, capability confirmation, escalation — not the safety module a second time.
+
+```bash
+cd backend
+python generate_evaluation_scenarios.py    # writes backend/data/evaluation_seeds.json
+python run_evaluation.py
+```
+
+Current result:
+
+```
+Scenarios completed without a human decision: 18 of 30
+Human interventions per decision point: 12 of 141 (8.5%)
+Servings delivered: 1011 of 1508
+Replans: 88
+Confirmations attempted: 50 (unresolved: 20)
+```
+
+18/30 (60%) resolve fully autonomously; the rest correctly escalate rather than force an
+unlawful or late delivery — most commonly because too few drivers are lawful *and* available
+for a perishable load, or because enough replanning cycles (a no-reply outreach costs 15
+simulated minutes, an unresolved confirmation costs 10) eat into the deadline before a viable
+recipient-and-driver combination is found. That is the failure mode the escalation path exists
+for, not an edge case it stumbles into.
 
 ## Running it
 
@@ -213,10 +239,9 @@ of): a fancy map UI, a multi-agent split (one coordinator agent is sufficient �
 criterion is orchestration quality, not agent count), live WhatsApp/SMS integration, real
 outreach to real organisations, optimization algorithms, dozens of recipients.
 
-Not yet built: the 30-scenario generated evaluation set (only the 3 hand-authored seeds exist
-today), a hosted live demo deployment, and Amazon Bedrock AgentCore (the hackathon calls this
-optional — a scoring boost, not a requirement — Strands Agents SDK is the required piece and
-that is built; see [Live Strands agent](#live-strands-agent-amazon-bedrock)).
+Not yet built: a hosted live demo deployment, and Amazon Bedrock AgentCore (the hackathon calls
+this optional — a scoring boost, not a requirement — Strands Agents SDK is the required piece
+and that is built; see [Live Strands agent](#live-strands-agent-amazon-bedrock)).
 
 ## License
 
